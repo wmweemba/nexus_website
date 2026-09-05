@@ -5,9 +5,13 @@
 record — why this exists, the positioning it serves. This file is what a session works from.
 
 **Progress checklist:** https://claude.ai/code/artifact/7d5d9892-93f0-49bc-9680-866946afbfaf
-Checkbox ids below match the checklist ids, so ticks and tasks stay aligned. The checklist
-persists to the artifact store, so **Claude can read completed items in any later session**
-— check it before assuming what is done.
+Checkbox ids below match the checklist ids, so ticks and tasks stay aligned. Ticks persist
+to the artifact store, so they survive reloads and follow William between devices.
+
+**Claude cannot read those ticks programmatically** — the artifact store is reachable from
+the page, not from a Claude Code session. To assess progress, read `git log` and
+`docs/DECISIONS.md` in this repo, or ask William. Do not assume a phase is done because
+the plan says it comes first.
 
 ## How to use this
 
