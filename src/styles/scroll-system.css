@@ -1,0 +1,208 @@
+/* ── Scroll system — Phase 3 ────────────────────────────────────────────
+   Native CSS scroll-driven animation only, gated behind
+   @supports (animation-timeline: scroll()). Content is visible by default
+   in every branch — no opacity:0 outside a supports/JS guard. See
+   docs/UI_UX_SPEC.md §6 and docs/BUILD-PLAN.md Phase 3. */
+
+/* ── Reveal primitive ──
+   Fallback for browsers without native scroll-timeline (Firefox stable) is
+   an IntersectionObserver, added by src/components/Reveal.astro's script.
+   That script only ever *adds* the opacity:0 starting class — if JS is
+   disabled and the browser lacks native support, .reveal never gets an
+   opacity rule at all, so content stays visible. */
+.reveal {
+  /* no default opacity/transform: visible baseline */
+}
+
+@supports (animation-timeline: scroll()) {
+  .reveal {
+    animation: reveal-in linear both;
+    animation-timeline: view();
+    animation-range: entry 10% cover 40%;
+  }
+}
+
+@keyframes reveal-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal.js-fallback {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.js-fallback.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal.js-fallback {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── BazaBooks phone — the signature moment ──
+   Pure CSS transform on a decorative element; the screenshot itself is
+   never hidden, so there is nothing to degrade beyond "the tilt doesn't
+   happen" in non-supporting browsers. */
+.phone-stage {
+  display: grid;
+  place-items: center;
+  padding-block: var(--space-8);
+  perspective: 1400px;
+}
+
+.phone-frame {
+  position: relative;
+  width: min(270px, 70vw);
+  aspect-ratio: 270 / 580;
+  border-radius: 2.25rem;
+  background: var(--ink);
+  padding: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 30px 60px -20px color-mix(in srgb, var(--ink) 60%, transparent);
+}
+
+@supports (animation-timeline: scroll()) {
+  .phone-frame {
+    animation: phone-tilt linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 60%;
+  }
+}
+
+@keyframes phone-tilt {
+  from {
+    transform: rotateY(-20deg) rotateX(8deg) scale(0.9);
+  }
+  to {
+    transform: rotateY(0deg) rotateX(0deg) scale(1);
+  }
+}
+
+.phone-notch {
+  position: absolute;
+  top: 0.5rem;
+  left: 50%;
+  translate: -50% 0;
+  width: 38%;
+  height: 1.25rem;
+  background: var(--ink);
+  border: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+  border-top: none;
+  border-radius: 0 0 0.75rem 0.75rem;
+  z-index: 1;
+}
+
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 1.75rem;
+  display: block;
+  background: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-frame {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* ── Horizontal section ──
+   Default is a plain, native horizontally-scrolling strip — real overflow
+   scroll, keyboard-operable via the tabindex on the scroller, no JS, no
+   wheel interception. Only browsers that support scroll-timeline get the
+   enhanced sticky + scroll-linked-transform version; everyone else keeps
+   the working native scroller instead of a broken sticky container with
+   nothing to move it. See docs/UI_UX_SPEC.md §6, "never hijack the scroll". */
+.hscroll {
+  height: auto;
+}
+
+.hscroll-sticky {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  padding-block: var(--space-2);
+}
+
+.hscroll-track {
+  display: flex;
+  gap: var(--space-6);
+  width: max-content;
+}
+
+.hscroll-card {
+  flex: 0 0 min(80vw, 22rem);
+  scroll-snap-align: start;
+}
+
+@supports (animation-timeline: scroll()) {
+  .hscroll {
+    height: 300vh;
+    /* Named view-timeline on the tall wrapper itself: progress tracks how
+       far the page has scrolled through *this element's* 300vh height, not
+       the whole document — a plain `scroll()` timeline was tried first and
+       ties to total document scroll instead, so the track never moved. See
+       docs/DECISIONS.md. */
+    view-timeline-name: --hscroll-progress;
+    view-timeline-axis: block;
+  }
+
+  .hscroll-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    scroll-snap-type: none;
+  }
+
+  .hscroll-track {
+    animation: hscroll-move linear both;
+    animation-timeline: --hscroll-progress;
+    animation-range: cover 0% cover 100%;
+    will-change: transform;
+  }
+}
+
+@keyframes hscroll-move {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(-1 * (100% - 100vw)));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hscroll {
+    height: auto;
+  }
+
+  .hscroll-sticky {
+    position: static;
+    height: auto;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .hscroll-track {
+    animation: none;
+    transform: none;
+  }
+}

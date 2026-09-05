@@ -7,6 +7,76 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Phase 4 — home page.
+
+### Added
+
+- `src/pages/index.astro`: full home page assembled from the approved copy in
+  `docs/copy/home.md` — hero (with the node-graph device) and "the gap" as one
+  continuous dark section, the security-awareness wedge (light), six services
+  in a `HorizontalScroll` strip plus the BazaBooks phone as a "business systems"
+  illustration (dark), selected work (light, NdalamaHub card + a no-consent-needed
+  "more on file" note), and the closing scoping-call CTA (dark) — alternating
+  grounds throughout, per `docs/UI_UX_SPEC.md` §3. See `docs/DECISIONS.md` for the
+  BazaBooks-placement and horizontal-strip decisions.
+
+### Fixed
+
+- A scoped-CSS bug found live: positioning the node-graph device with a class
+  passed straight into the `NodeGraph` component doesn't work — Astro only
+  applies its scoping attribute to elements written directly in the page file,
+  not to a child component's rendered markup, so the rule silently never
+  matched and the SVG rendered full-size in normal document flow instead of as
+  a background layer. Fixed by wrapping `<NodeGraph>` in a plain `<div
+  class="hero-graphic">` and sizing the child `<svg>` via `:global()`.
+
+### Verified
+
+- `npm run budget`: critical path 4.5 KB / 100 KB, 0 JS files in `dist`, fonts
+  75.1 KB / 80 KB — passed.
+- NS-010 grep against `dist/**/*.css`: no dead `bg-[--token]` output.
+- Full page content and heading hierarchy checked via the accessibility tree
+  (h1 once, one h2 per section); section-ground colour pairing checked via
+  computed styles (dark ground → paper text, light ground → ink text, at every
+  section). Full Lighthouse mobile pass deferred to `p7-perf` — see
+  `docs/DECISIONS.md`.
+
+Phase 3 — the scroll system.
+
+### Added
+
+- `Reveal.astro`: scroll-in primitive. Native `animation-timeline: view()` where
+  supported; an IntersectionObserver fallback (~350 bytes, the site's first
+  JavaScript) everywhere else; plain and visible with neither. See
+  `docs/DECISIONS.md`.
+- `PhoneShowcase.astro`: the BazaBooks signature moment — a CSS-drawn phone frame
+  tilted into place by `perspective` + scroll-linked `rotateY`/`rotateX`/`scale` via
+  `animation-timeline: view()`. Screen graphic (`bazabooks-screen.webp`, 15.7 KB) is
+  a real crop of BazaBooks' own live marketing hero, sourced from `payrush_saas_app`.
+  See `docs/DECISIONS.md`.
+- `HorizontalScroll.astro`: a native `overflow-x: auto` strip by default —
+  keyboard-operable, no JS — enhanced to a `position: sticky` + scroll-linked
+  `translateX` track (named `view-timeline`) where `animation-timeline` is
+  supported. Never intercepts the scroll in either branch.
+- `src/styles/scroll-system.css`: the CSS behind all three, with explicit
+  `prefers-reduced-motion` overrides for each (verified via CDP media emulation —
+  phone stays static, horizontal section collapses to a plain scrollable strip with
+  no dead space, reveal resolves near-instantly).
+- Demo sections for all three added to `/styleguide` for verification; not shipped
+  to production navigation.
+
+### Fixed
+
+- A horizontal-section bug found live: `animation-timeline: scroll(nearest block)`
+  ties progress to the whole document's scroll range, not the pinned section's own
+  300vh — the track never moved. Fixed with a named `view-timeline` on the wrapper.
+  See `docs/DECISIONS.md`.
+- A phone-frame rendering bug found live: `border-radius` + `transform-style:
+  preserve-3d` on the same element rendered the rounded top corners as two
+  disconnected arcs under `rotateY` in Chromium. Fixed by removing `preserve-3d`
+  (not needed — no child requires independent 3D positioning). See
+  `docs/DECISIONS.md`.
+
 Phase 2 — design system in code.
 
 ### Added

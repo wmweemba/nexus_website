@@ -4,6 +4,7 @@
 @import 'tailwindcss' source('../');
 @import './tokens.css';
 @import './fonts.css';
+@import './scroll-system.css';
 
 /* Tailwind v4 theme registration. Do NOT use the v3 bg-[--token] shorthand —
    it was silently dropped in v4 and produces dead CSS. See CLAUDE.md NS-010. */

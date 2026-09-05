@@ -7,6 +7,157 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-05 — Home page: BazaBooks phone illustrates "Business systems", not "Selected work"
+
+`p4-assemble`. `docs/copy/home.md` never names BazaBooks — the phone showcase built in
+Phase 3 has no assigned home in the approved copy. Placed it inside the "Six things, one
+team" section, next to the "Business systems" item, with a plain-text caption identifying
+it as "one of our own builds" rather than a client deliverable. Deliberately kept it out
+of "Selected work": that section is about client engagements (NdalamaHub, the unnamed
+security-awareness programme), and BazaBooks is William's own product — captioning it as
+work delivered *for* a client would misrepresent it.
+
+**Rules out:** dropping the phone into the work/case-study section for lack of a better
+slot. If BazaBooks copy is ever added to the site, this placement is worth revisiting, not
+assumed correct forever.
+
+## 2026-09-05 — Home page: six services rendered as a horizontal-scroll strip, not a grid
+
+`p4-assemble`. `docs/copy/home.md` describes a "six-item grid", but the horizontal-scroll
+primitive built in `p3-horizontal` had no production use yet outside `/styleguide`. Six
+short service cards are a good fit for the pattern (each card is self-contained, order
+doesn't carry meaning beyond the list), and it exercises the component on the flagship
+page rather than leaving it as a styleguide-only demo. Un-enhanced behaviour is the same
+native `overflow-x: auto` strip verified in Phase 3 — full content still reachable without
+JS or scroll-timeline support.
+
+**Rules out:** treating "grid" in the copy doc literally where a component built for this
+exact shape of content already exists and is better exercised in production.
+
+## 2026-09-05 — Phase 4 measurement: build-size budget passed; full Lighthouse deferred to Phase 7
+
+`p4-measure`. `npm run budget` against the real assembled home page: critical-path CSS+JS
+(gzip) 4.5 KB against a 100 KB budget; 0 JS files in `dist` (Reveal's ~350-byte script is
+inlined per-page, not a separate request); fonts 75.1 KB against 80 KB. `dist/index.html`
+is 17.8 KB uncompressed, 5.2 KB gzipped.
+
+No Lighthouse CLI is available in this session's sandbox (no network install attempted —
+out of scope for a quick in-session check), and the Browser-pane tooling available here
+doesn't expose a Lighthouse run. Real Lighthouse mobile numbers are deferred to `p7-perf`
+(`pa --full`), which is the canonical performance-audit phase and already scoped for this.
+Recorded here so a later session doesn't assume this number was measured when it wasn't.
+
+**Rules out:** asserting an LCP or Lighthouse score without having actually run it — the
+build-size numbers above are real measurements; the Lighthouse figures in the budget table
+are not yet.
+
+## 2026-09-05 — Horizontal section uses a named `view-timeline`, not `scroll()`
+
+`p3-horizontal`. First implementation set `animation-timeline: scroll(nearest block)`
+on `.hscroll-track` — this ties progress to the *whole document's* scroll range (0% at
+top of page, 100% at bottom), not to how far the reader has scrolled through the
+300vh `.hscroll` wrapper itself. Confirmed live: `getComputedStyle(track).transform`
+stayed `none` after 900px of scrolling.
+
+**Fix:** `view-timeline-name: --hscroll-progress` on the tall `.hscroll` wrapper,
+referenced as `animation-timeline: --hscroll-progress` on the track, with
+`animation-range: cover 0% cover 100%`. A view-timeline tracks the visibility of its
+*own* subject element crossing the viewport — exactly the 300vh scroll distance we
+want mapped to 0–100% track movement — where a bare `scroll()` timeline tracks the
+nearest scroller's total scroll range regardless of element position.
+
+**Rules out:** reaching for `scroll()` for any "pin this section and drive a
+transform as the reader scrolls through it" pattern on this site. That pattern is
+always a named `view-timeline` on the pinned wrapper, referenced by name on the
+element actually being transformed.
+
+## 2026-09-05 — BazaBooks phone frame: no `transform-style: preserve-3d`
+
+`p3-phone`. The frame's `border-radius` combined with `transform-style: preserve-3d`
+on the same element rendered visibly broken in Chromium — the rounded top corners
+painted as two disconnected arcs instead of one continuous curve once `rotateY` was
+applied. `preserve-3d` is only needed when child elements must occupy independent
+positions in 3D space; the notch and screenshot here are just flat layers riding
+along with their parent's transform, so removing it (default `flat`) fixes the
+corner rendering with no visual loss. `perspective` stays on the `.phone-stage`
+wrapper — that's what creates the depth for the child's rotation.
+
+**Rules out:** adding `preserve-3d` to `.phone-frame` again without a concrete need
+for a child to be positioned independently in the 3D space (there is none here).
+
+## 2026-09-05 — BazaBooks phone screenshot: real asset, sourced from BazaBooks' own repo
+
+`p3-phone`. First pass shipped a placeholder SVG because no standalone BazaBooks
+screenshot asset existed: the only material in
+`wsm-second-brain/ventures/saas/bazabooks/fliers/` is composite marketing flier art
+at 1080×1350 with copy baked in (its own README calls flier 4 "a hand-built mock…
+not a real screenshot"), and `marketing_sales_assets/bazabooks/` (Google Drive, per
+NS-008) turned out to hold social-post graphics for the awareness campaign, not app
+screens.
+
+**Resolved by going to `payrush_saas_app` itself** (the actual BazaBooks repo — the
+second brain's venture notes reference it by that name throughout
+`ventures/saas/bazabooks/RUNBOOK.md`). Its `client/public/og-cover.webp` — the
+site's own social-share image — captures the live landing page's hero graphic: an
+illustrative "Acme Corp" invoice card (`ZMW 4,500.00`, line items, a "View invoice"
+button) that BazaBooks already uses as its own product visual. Rather than
+downscaling the flat OG image, fetched the same element live from
+bazabooks.nxhub.online and took a DOM-scoped screenshot of just the invoice-card
+element (`div.rounded-[24px].overflow-hidden.bg-white`, the floating "payment
+received" toast hidden first so it doesn't bleed into the crop), then exported it as
+WebP via Pillow — `public/images/bazabooks-screen.webp`, 540×1160, 15.7 KB, under the
+~30 KB target.
+
+**No consent question:** this is William's own product's own marketing asset, not a
+client deliverable — unlike the NdalamaHub/ManifiPay case studies gated on
+`p5-consent`. The sample data (Acme Corp) was already illustrative on BazaBooks' own
+site, not a real customer's invoice.
+
+**Rules out:** treating a screenshot gap as a phase blocker before checking whether
+the product's own repo already has the asset in some other guise (an OG image, a
+build artifact) — check there before mocking one up from a style guide.
+
+## 2026-09-05 — Reveal primitive ships one small first-party script
+
+`p3-primitives`. `docs/UI_UX_SPEC.md` §6 specifies an IntersectionObserver fallback
+for browsers without native `animation-timeline` support (Firefox stable, ~16%
+global per the earlier support check). This is the site's first JavaScript, so per
+CLAUDE.md rule 1 it needs justification here: `src/components/Reveal.astro` ships a
+~350-byte inline script, gated behind `!CSS.supports('animation-timeline','scroll()')`,
+that adds a fade/rise class via IntersectionObserver. Astro inlines and dedupes it —
+one copy per page regardless of how many `<Reveal>` instances it contains. If the
+script never runs (disabled, or blocked), `.reveal` elements carry no opacity rule at
+all and render plainly visible — verified directly via CDP script-execution
+disabling. The BazaBooks phone and horizontal-scroll components needed no JS at all:
+the phone's tilt is pure decorative CSS transform (never hides content), and the
+horizontal section's non-enhanced state is a real `overflow-x: auto` strip.
+
+**Rules out:** any animation library or a hand-rolled scroll-position listener for
+this — this is strictly a plainer version of what native CSS already does for ~84%
+of browsers.
+
+## 2026-09-05 — Horizontal section's un-enhanced default is a real scroll strip, not a broken sticky container
+
+`p3-horizontal`. The first draft put the tall `.hscroll` wrapper (300vh) and the
+`position: sticky` pin unconditionally, then tried to drive the track's transform
+only inside `@supports (animation-timeline: scroll())`. In a non-supporting browser
+that leaves a pinned, `overflow: hidden` container with a track that never moves —
+300vh of dead scroll distance with the later cards permanently unreachable, which
+also breaks keyboard operability.
+
+**Fix:** the base (un-enhanced) rules are a plain `overflow-x: auto` strip —
+`height: auto`, no sticky, `scroll-snap-type: x proximity`, `tabindex="0"` +
+`role="group"` on the scroller for keyboard access. The sticky/tall-wrapper/
+scroll-linked-transform version only exists inside the `@supports` block, so it's
+strictly additive for browsers that can actually drive it.
+
+**Rules out:** designing any scroll-enhanced component "sticky-first" with the
+plain-CSS case as an afterthought. The reachable, keyboard-operable version has to be
+the default the markup produces with zero CSS support, and the animation-timeline
+version has to earn its way in as a `@supports`-gated upgrade.
+
+---
+
 ## 2026-09-05 — IBM Plex Mono dropped sitewide, not just on mobile
 
 `p2-mono`, decided during Phase 2. The system mono stack

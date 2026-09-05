@@ -1,0 +1,30 @@
+---
+/**
+ * The signature moment — the BazaBooks phone. A screenshot in a CSS-drawn
+ * frame, tilted into place by scroll position via `perspective` + rotateY/
+ * rotateX (src/styles/scroll-system.css .phone-frame). See
+ * docs/UI_UX_SPEC.md §6.
+ *
+ * `src` defaults to `bazabooks-screen.webp`, cropped from BazaBooks' own
+ * live marketing hero (bazabooks.nxhub.online, same illustrative "Acme
+ * Corp" sample invoice already shipped in payrush_saas_app's own
+ * `client/public/og-cover.webp`) — William's own product, not a client
+ * asset, so no consent question. See docs/DECISIONS.md.
+ */
+interface Props {
+  src?: string;
+  alt?: string;
+}
+
+const {
+  src = '/images/bazabooks-screen.webp',
+  alt = 'BazaBooks invoice screen, sample data',
+} = Astro.props;
+---
+
+<div class="phone-stage">
+  <div class="phone-frame">
+    <div class="phone-notch" aria-hidden="true"></div>
+    <img class="phone-screen" src={src} alt={alt} width="270" height="580" loading="lazy" decoding="async" />
+  </div>
+</div>

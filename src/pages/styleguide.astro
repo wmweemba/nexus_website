@@ -9,6 +9,16 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Section from '../components/Section.astro';
 import NodeGraph from '../components/NodeGraph.astro';
+import Reveal from '../components/Reveal.astro';
+import PhoneShowcase from '../components/PhoneShowcase.astro';
+import HorizontalScroll from '../components/HorizontalScroll.astro';
+
+const hscrollCards = [
+  { title: 'Scope', body: 'A short discovery call maps the control environment before anything is quoted.' },
+  { title: 'Build', body: 'Fixed-price delivery against a written statement of work — no time-and-materials drift.' },
+  { title: 'Harden', body: 'Security awareness training and phishing simulation for the people, not just the stack.' },
+  { title: 'Support', body: 'A retainer keeps the site, the training and the controls current after handover.' },
+];
 
 const colors = [
   { name: '--ink', value: '#0B1E2D' },
@@ -134,6 +144,53 @@ const spaceSteps = ['--space-1', '--space-2', '--space-3', '--space-4', '--space
         <a href="#" class="btn btn-primary">Primary action</a>
         <a href="#" class="btn btn-ghost">Ghost action</a>
         <span class="chip">Mono chip</span>
+      </div>
+    </Section>
+
+    <Section ground="light">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Scroll system — reveal</h2>
+      <p class="mt-2 max-w-[65ch]" style="color: var(--slate)">
+        Scroll-driven where supported (<code>animation-timeline: view()</code>), an
+        IntersectionObserver fallback everywhere else, plain and visible with neither. See
+        <code>src/components/Reveal.astro</code>.
+      </p>
+      <div class="mt-8 flex flex-col gap-24">
+        {[1, 2, 3].map((n) => (
+          <Reveal class="rounded-md p-8" as="div">
+            <div style="background: var(--mist); border: 1px solid var(--mist); border-radius: var(--radius-md); padding: 2rem;">
+              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--cyan-deep)">Reveal {n}</p>
+              <p class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">Scrolls into view, once.</p>
+            </div>
+          </Reveal>
+        ))}
+      </div>
+    </Section>
+
+    <Section ground="dark">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Scroll system — the BazaBooks phone</h2>
+      <p class="mt-2 max-w-[65ch]" style="color: var(--steel)">
+        The signature moment. Real BazaBooks screen, cropped from its own live marketing
+        hero — see <code>docs/DECISIONS.md</code>.
+      </p>
+      <PhoneShowcase />
+    </Section>
+
+    <Section ground="light">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Scroll system — horizontal section</h2>
+      <p class="mt-2 max-w-[65ch]" style="color: var(--slate)">
+        Native <code>overflow-x: auto</code> by default — keyboard-operable, no JS. Enhanced to
+        a sticky, scroll-linked track where <code>animation-timeline</code> is supported. Never
+        hijacks the scroll in either branch.
+      </p>
+      <div class="mt-8">
+        <HorizontalScroll label="How Nexus engagements run">
+          {hscrollCards.map((card) => (
+            <article class="hscroll-card rounded-md p-6" style="background: var(--paper); border: 1px solid var(--mist);">
+              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--cyan-deep)">{card.title}</p>
+              <p class="mt-2" style="color: var(--slate)">{card.body}</p>
+            </article>
+          ))}
+        </HorizontalScroll>
       </div>
     </Section>
 

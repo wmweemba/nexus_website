@@ -1,0 +1,23 @@
+---
+/**
+ * Horizontal section. Default is a real `overflow-x: auto` strip — no JS,
+ * keyboard-operable, no wheel interception. Browsers that support
+ * scroll-timeline (src/styles/scroll-system.css) get the enhanced version:
+ * `position: sticky` plus a scroll-linked translateX driven by the page's
+ * own vertical scroll, per docs/UI_UX_SPEC.md §6. Never hijacks the scroll
+ * in either branch — there is no scroll-event listener anywhere.
+ */
+interface Props {
+  label: string;
+}
+
+const { label } = Astro.props;
+---
+
+<div class="hscroll">
+  <div class="hscroll-sticky" tabindex="0" role="group" aria-label={label}>
+    <div class="hscroll-track">
+      <slot />
+    </div>
+  </div>
+</div>
