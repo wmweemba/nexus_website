@@ -7,6 +7,38 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-05 — Site information architecture, locked from the SEO audit
+
+Full audit: `docs/SEO-AUDIT-2026-09.md`. Routes:
+
+```
+/                              home
+/services/                     six-pillar overview + pricing shape
+/services/security-awareness/  dedicated wedge landing page
+/work/                         case-study index
+/work/ndalamahub/              case study
+/work/[tbc]/                   second case study — blocked on p5-consent
+/about/                        team, positioning, small-on-purpose framing
+/contact/                      scoping-call CTA, no-JS-fallback form
+```
+
+**Why a dedicated `/services/security-awareness/` route** rather than folding it into one
+`/services/` page: the audit found the compliance/phishing-simulation keyword cluster is
+materially less contested than general Lusaka web-design search, and it is the wedge the
+whole positioning is built on. A page with its own title tag, meta description and the
+Bank of Zambia's 31 May 2023 Cyber and Information Risk Management Guidelines cited by
+name earns its own route. This extends `p5-services` in the build plan from one page to
+two; the effort is one extra static page, not a new phase.
+
+**Old-URL redirects are simpler than assumed.** `/about/` and `/contact/` on the new site
+use the same paths as the old WordPress site, so `p6-redirects` needs no rewrite rule for
+them — only the 410s for `/scan/`, `/ncs/`, `/3cx/` and the three blog posts stand.
+
+**Rules out:** a blog/insights section at launch. The audit found real, uncontested
+keyword demand around Zambia Data Protection Act compliance, but it is net-new content
+production with no existing draft — out of scope for a two-weekend build. Logged so a
+later session doesn't rediscover it as a gap.
+
 ## 2026-09-05 — Tailwind v4 content scan scoped to `src/`
 
 Confirmed the NS-010 trap live during Phase 0: Tailwind v4's automatic content

@@ -7,7 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Nothing yet — Phase 1 (content and SEO architecture) starts here.
+Phase 1 — content and SEO architecture.
+
+### Added
+
+- `docs/SEO-AUDIT-2026-09.md`: keyword research and content-gap analysis. Confirms the
+  security-awareness wedge is the lowest-competition, highest-intent keyword cluster in
+  this market, and surfaces the Bank of Zambia's Cyber and Information Risk Management
+  Guidelines (gazetted 31 May 2023) as a citable regulatory anchor no competitor uses.
+- Information architecture locked in `docs/DECISIONS.md`: seven routes, including a
+  dedicated `/services/security-awareness/` landing page split out of the general
+  services page on the audit's recommendation.
+- Full page copy drafted for all seven routes in `docs/copy/` (home, services,
+  security-awareness, work, about, contact), adapted from the approved 2026 company
+  profile. Passed a `human-voice` review; one curly-quote/negative-parallelism fix made
+  on the security-awareness draft.
+- Astro content-collection schema for case studies (`src/content.config.ts`), with the
+  NdalamaHub entry published and a ManifiPay entry drafted but unpublished pending
+  client consent (`p5-consent`).
 
 ## [0.1.0] - 2026-09-05
 
