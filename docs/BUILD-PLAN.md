@@ -4,8 +4,10 @@
 (`wsm-second-brain/ventures/nexus/website-2026/00-build-plan.md`) holds the strategic
 record — why this exists, the positioning it serves. This file is what a session works from.
 
-Progress is tracked on the interactive checklist (link in the brain doc). Checkbox ids
-below match the checklist ids, so ticks and tasks stay aligned.
+**Progress checklist:** https://claude.ai/code/artifact/7d5d9892-93f0-49bc-9680-866946afbfaf
+Checkbox ids below match the checklist ids, so ticks and tasks stay aligned. The checklist
+persists to the artifact store, so **Claude can read completed items in any later session**
+— check it before assuming what is done.
 
 ## How to use this
 
