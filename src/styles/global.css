@@ -1,0 +1,40 @@
+/* Scope automatic content detection to src/ — otherwise Tailwind scans the
+   whole repo, including CLAUDE.md, and its literal "bg-[--token]" example
+   text gets generated as real (dead) CSS. Confirmed hitting this 2026-09-05. */
+@import 'tailwindcss' source('../');
+@import './tokens.css';
+@import './fonts.css';
+
+/* Tailwind v4 theme registration. Do NOT use the v3 bg-[--token] shorthand —
+   it was silently dropped in v4 and produces dead CSS. See CLAUDE.md NS-010. */
+@theme inline {
+  --color-ink: var(--ink);
+  --color-cyan: var(--cyan);
+  --color-cyan-deep: var(--cyan-deep);
+  --color-sap: var(--sap);
+  --color-slate: var(--slate);
+  --color-steel: var(--steel);
+  --color-mist: var(--mist);
+  --color-paper: var(--paper);
+
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+  --font-mono: var(--font-mono);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
+}

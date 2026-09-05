@@ -1,0 +1,22 @@
+/* Brand tokens — single source. Never hardcode a hex value in a component.
+   See docs/UI_UX_SPEC.md §2. */
+:root {
+  /* Brand */
+  --ink: #0b1e2d; /* anchor — headlines, body, dark grounds */
+  --cyan: #00a9d6; /* brand colour — graphic use only on light */
+  --cyan-deep: #00758f; /* cyan as text on light grounds */
+  --sap: #a8d93c; /* gradient tail and accent rules ONLY, never text */
+
+  /* Neutrals — cyan-biased, not pure grey */
+  --slate: #3e5460; /* body copy on light */
+  --steel: #8fa3ae; /* captions, metadata */
+  --mist: #e6edf0; /* hairline rules, borders */
+  --paper: #f6f9fa; /* light ground — never pure white */
+
+  --grad: linear-gradient(90deg, #00a9d6, #4cc9b0, #a8d93c);
+
+  /* Type */
+  --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+}

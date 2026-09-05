@@ -7,6 +7,30 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-05 — Tailwind v4 content scan scoped to `src/`
+
+Confirmed the NS-010 trap live during Phase 0: Tailwind v4's automatic content
+detection scans the whole project by default, and it generated real (dead) CSS for
+`.bg-\[--token\]` — the literal example string from this repo's own CLAUDE.md — because
+that file sits in the scanned root. `grep` in CLAUDE.md caught it in `dist/**/*.css`.
+
+**Fix:** `@import "tailwindcss" source("../");` in `src/styles/global.css`, scoping
+detection to `src/` only. Rebuilt clean — the grep now returns nothing.
+
+**Rules out:** leaving Tailwind's default whole-repo scan in place. Any future doc that
+mentions a Tailwind class pattern as prose risks the same false positive.
+
+## 2026-09-05 — Fonts: Sora 600/700 + IBM Plex Sans 400/500, self-hosted
+
+Extracted Latin-subset WOFF2 files from the published `@fontsource/sora` and
+`@fontsource/ibm-plex-sans` packages (5.3.0) into `public/fonts/`, then removed the
+packages from `package.json` — they were only needed as an extraction source, not a
+runtime dependency. Actual byte cost: Sora 600 15.0 KB, Sora 700 14.8 KB, Plex Sans 400
+22.1 KB, Plex Sans 500 23.6 KB — **75.1 KB total**, under the 80 KB budget.
+
+IBM Plex Mono deferred to `p2-mono` per the build plan; `--font-mono` currently resolves
+to the system mono stack (`ui-monospace, "SF Mono", Menlo, monospace`).
+
 ## 2026-09-05 — Astro, static output, markdown content, no CMS
 
 Ships zero JavaScript by default, which is the constraint the whole project is built
