@@ -20,6 +20,21 @@
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
+
+  --text--1: var(--text--1);
+  --text-0: var(--text-0);
+  --text-1: var(--text-1);
+  --text-2: var(--text-2);
+  --text-3: var(--text-3);
+  --text-4: var(--text-4);
+  --text-5: var(--text-5);
+  --text-6: var(--text-6);
+
+  --spacing-section: var(--space-section);
+  --spacing-gutter: var(--space-gutter);
+
+  --radius-md: var(--radius);
+  --radius-full: var(--radius-full);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -37,4 +52,128 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-body);
+  font-size: var(--text-0);
+}
+
+/* Visible focus state on every interactive element — never removed without a
+   replacement. See docs/UI_UX_SPEC.md §7. */
+:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 2px;
+}
+
+/* ── Section shell ──────────────────────────────────────────────────────
+   Each section declares its ground via data-ground and takes *all* colours
+   from the matching set — never a colour whose only definition assumes the
+   other ground. Alternating grounds are the page's structural signature.
+   See docs/UI_UX_SPEC.md §3. */
+.section {
+  position: relative;
+  padding-block: var(--space-section);
+}
+
+.section[data-ground='dark'] {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.section[data-ground='light'] {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* The seam between alternating sections: a hard edge carrying the brand
+   gradient rule, never a soft fade — a fade reads as indecision. */
+.section + .section::before {
+  content: '';
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 2px;
+  background: var(--grad);
+}
+
+.container {
+  max-width: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--space-gutter);
+}
+
+/* ── Buttons ── ground-aware: colours resolve from the section's own set. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--text--1);
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+  min-height: 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn {
+    transition: none;
+  }
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+[data-ground='dark'] .btn-primary {
+  background: var(--cyan);
+  color: var(--ink);
+}
+
+[data-ground='dark'] .btn-primary:hover {
+  background: var(--sap);
+}
+
+[data-ground='dark'] .btn-ghost {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid color-mix(in srgb, var(--paper) 30%, transparent);
+}
+
+[data-ground='light'] .btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+[data-ground='light'] .btn-primary:hover {
+  background: var(--cyan-deep);
+}
+
+[data-ground='light'] .btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--mist);
+}
+
+/* ── Chips ── mono uppercase pill, ground-aware. Used for eyebrows and
+   metadata, never as the only carrier of meaning. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: var(--radius-full);
+  padding: var(--space-2) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text--1);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+[data-ground='dark'] .chip {
+  background: color-mix(in srgb, var(--paper) 12%, transparent);
+  color: var(--cyan);
+}
+
+[data-ground='light'] .chip {
+  background: var(--mist);
+  color: var(--cyan-deep);
 }

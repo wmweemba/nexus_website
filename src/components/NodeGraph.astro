@@ -1,0 +1,101 @@
+---
+/**
+ * The recurring device — a converging node graph. Points converging is the
+ * company name and the logo's argument. Inline SVG only: paths, circles, one
+ * radial gradient halo, layered at different opacities for depth. No images,
+ * no extra requests. Ported from the approach in `ndalamahub_lms_app`
+ * `client/src/components/auth/AuthLayout.jsx`. See docs/UI_UX_SPEC.md §4.
+ *
+ * It is a background device — it never competes with type for attention, so
+ * it always renders aria-hidden.
+ */
+interface Props {
+  nodeCount?: number;
+  density?: number; // 0–1, probability an outer node also links to its neighbour
+  opacity?: number; // 0–1, base opacity multiplier for the whole device
+  seed?: number;
+  ground?: 'dark' | 'light';
+  class?: string;
+}
+
+const {
+  nodeCount = 9,
+  density = 0.35,
+  opacity = 1,
+  seed = 1,
+  ground = 'dark',
+  class: className,
+} = Astro.props;
+
+// Deterministic PRNG (mulberry32) so a given seed always draws the same
+// graph — no client JS, no hydration mismatch between build and render.
+function mulberry32(a: number) {
+  return function () {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+const rand = mulberry32(seed);
+const VIEW = 600;
+const CENTER = { x: VIEW / 2, y: VIEW / 2 };
+
+const outerNodes = Array.from({ length: nodeCount }, (_, i) => {
+  const angle = (i / nodeCount) * Math.PI * 2 + rand() * 0.4;
+  const radius = VIEW * (0.28 + rand() * 0.2);
+  return {
+    x: CENTER.x + Math.cos(angle) * radius,
+    y: CENTER.y + Math.sin(angle) * radius,
+    r: 4 + rand() * 5,
+  };
+});
+
+const neighbourLinks = outerNodes
+  .map((node, i) => ({ from: node, to: outerNodes[(i + 1) % outerNodes.length] }))
+  .filter(() => rand() < density);
+
+const stroke = ground === 'dark' ? '#E6EDF0' : '#0B1E2D';
+const nodeFill = ground === 'dark' ? '#E6EDF0' : '#0B1E2D';
+const haloColor = '#00A9D6';
+const gradId = `nodegraph-halo-${seed}`;
+---
+
+<svg
+  class={className}
+  viewBox={`0 0 ${VIEW} ${VIEW}`}
+  preserveAspectRatio="xMidYMid slice"
+  aria-hidden="true"
+  focusable="false"
+>
+  <defs>
+    <radialGradient id={gradId}>
+      <stop offset="0%" stop-color={haloColor} stop-opacity={0.35 * opacity} />
+      <stop offset="70%" stop-color={haloColor} stop-opacity={0.06 * opacity} />
+      <stop offset="100%" stop-color={haloColor} stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <g stroke={stroke} stroke-opacity={0.12 * opacity} stroke-width="1.5" stroke-linecap="round" fill="none">
+    {neighbourLinks.map((link) => (
+      <path d={`M${link.from.x},${link.from.y} L${link.to.x},${link.to.y}`} />
+    ))}
+  </g>
+
+  <g stroke={stroke} stroke-opacity={0.28 * opacity} stroke-width="1.5" stroke-linecap="round" fill="none">
+    {outerNodes.map((node) => (
+      <path d={`M${CENTER.x},${CENTER.y} L${node.x},${node.y}`} />
+    ))}
+  </g>
+
+  <g fill={nodeFill} fill-opacity={0.3 * opacity}>
+    {outerNodes.map((node) => (
+      <circle cx={node.x} cy={node.y} r={node.r} />
+    ))}
+  </g>
+
+  <circle cx={CENTER.x} cy={CENTER.y} r={VIEW * 0.16} fill={`url(#${gradId})`} />
+  <circle cx={CENTER.x} cy={CENTER.y} r="10" fill={haloColor} fill-opacity={opacity} />
+</svg>

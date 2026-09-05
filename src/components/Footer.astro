@@ -1,0 +1,104 @@
+---
+/**
+ * Footer. Dark ground, matching the nav — the page opens and closes on the
+ * same register. Real contact and registration details from
+ * docs/copy/about.md and docs/copy/contact.md, not placeholders.
+ */
+const year = new Date().getFullYear();
+
+const links = [
+  { href: '/services/', label: 'Services' },
+  { href: '/work/', label: 'Work' },
+  { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
+];
+---
+
+<footer class="footer" data-ground="dark">
+  <div class="container footer-inner">
+    <div class="footer-col">
+      <p class="footer-logo">Nexus Consulting</p>
+      <p class="footer-meta">Incorporated 2020 · PACRA 120200003611</p>
+      <p class="footer-meta">Plot 9 Katopola Road, Rhodes Park, Lusaka</p>
+    </div>
+
+    <nav class="footer-col" aria-label="Footer">
+      <p class="footer-heading">Site</p>
+      <ul class="footer-list">
+        {links.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+
+    <div class="footer-col">
+      <p class="footer-heading">Contact</p>
+      <p><a href="tel:+260954156056">+260 954 156 056</a></p>
+      <p><a href="mailto:info@mynexusgroup.com">info@mynexusgroup.com</a></p>
+    </div>
+  </div>
+
+  <div class="container footer-legal">
+    <p>&copy; {year} Nexus Consulting Services Limited.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding-block: var(--space-10) var(--space-6);
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .footer-inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: var(--space-8);
+  }
+
+  .footer-logo {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: var(--text-1);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer-meta {
+    font-family: var(--font-mono);
+    font-size: var(--text--1);
+    color: var(--steel);
+  }
+
+  .footer-heading {
+    font-family: var(--font-mono);
+    font-size: var(--text--1);
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--steel);
+    margin-bottom: var(--space-3);
+  }
+
+  .footer-list {
+    list-style: none;
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .footer a {
+    color: var(--paper);
+    text-decoration: none;
+  }
+
+  .footer a:hover {
+    color: var(--cyan);
+  }
+
+  .footer-legal {
+    margin-top: var(--space-8);
+    padding-top: var(--space-6);
+    border-top: 1px solid color-mix(in srgb, var(--paper) 15%, transparent);
+    font-family: var(--font-mono);
+    font-size: var(--text--1);
+    color: var(--steel);
+  }
+</style>

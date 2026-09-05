@@ -7,6 +7,53 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-05 — IBM Plex Mono dropped sitewide, not just on mobile
+
+`p2-mono`, decided during Phase 2. The system mono stack
+(`ui-monospace, "SF Mono", Menlo, monospace`) was already the default from Phase 0
+pending this call. Confirmed rather than reversed: mono type on this site only ever
+carries labels, captions and figures — never a reading experience where face identity
+matters — so the fallback costs nothing perceptible against a real request and file-size
+line in the font budget. Desktop gets no exception; a stack that differs by breakpoint is
+one more thing to drift.
+
+**Rules out:** self-hosting IBM Plex Mono at all. If a future page needs genuine
+code/data-table typography where the system stack looks inconsistent across OSes, that's
+a new decision, not a reopening of this one.
+
+## 2026-09-05 — Nav has no disclosure widget; it always renders full and wraps
+
+`p2-nav`. Considered a `<details>/<summary>` hamburger (no JS, semantically a disclosure
+widget) but rejected it: overriding a `details` element's native show/hide behaviour
+across breakpoints relies on undocumented browser-specific behaviour, and Opera Mini's
+near-zero CSS support (real share on low-end Android in this market, per CLAUDE.md) makes
+an unusual pattern risky to trust sight-unseen. Nexus's nav is four links — small enough
+that a flex-wrapped row degrades to two short lines on a 360px viewport without needing a
+collapse mechanism at all.
+
+**Rules out:** any nav treatment that depends on JS or on relying on `details` rendering
+consistently without a live cross-browser check.
+
+## 2026-09-05 — Section-ground colour rules must never nest opposite grounds
+
+Found live while building `/styleguide`: `.section[data-ground='dark'] .btn-ghost` and
+`.section[data-ground='light'] .btn-ghost` share identical specificity (0,2,0). When a
+page nests a `data-ground="dark"` element inside a `data-ground="light"` ancestor (as the
+first draft of the styleguide's button demo did), CSS resolves the tie by **source
+order**, not DOM proximity — the rule declared later in the stylesheet wins regardless of
+which ground is actually closer. The dark demo box silently rendered with light-ground
+button colours.
+
+**Fix:** never nest a `data-ground` element inside an ancestor with the other value.
+`docs/UI_UX_SPEC.md` §3 already says "every section declares its own ground" — this
+makes explicit that the rule is load-bearing for correctness, not just visual rhythm.
+Any component that must preview the opposite ground (styleguide, a card floating over the
+other section's background) needs its own explicit override selector, not a bare
+`data-ground` swap.
+
+**Rules out:** ad hoc `data-ground="dark"` wrapper `<div>`s dropped inside light sections
+for one-off contrast. Use a real `<Section ground="dark">` instead.
+
 ## 2026-09-05 — Site information architecture, locked from the SEO audit
 
 Full audit: `docs/SEO-AUDIT-2026-09.md`. Routes:
@@ -120,8 +167,6 @@ Redirect `/about/` and `/contact/` to their new equivalents; 410 the rest.
 
 ## Open — decide during the build
 
-- **IBM Plex Mono on mobile.** Drop to a system mono stack to save a font request, or keep
-  for brand consistency? Decide in Phase 2, record here. Do not discover it at audit.
 - **PWA / offline shell.** Genuine value on 2G, but not a launch blocker. Assess in
   Phase 7 on evidence, not assumption.
 - **Case study client consent.** Naming ManifiPay and NdalamaHub in public case studies

@@ -18,5 +18,38 @@
   /* Type */
   --font-display: 'Sora', ui-sans-serif, system-ui, sans-serif;
   --font-body: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  /* System mono stack sitewide, not just mobile — see docs/DECISIONS.md p2-mono. */
   --font-mono: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Type scale — fluid clamp(), ~1.25 ratio at rest, wider at the top of the
+     scale where the viewport range does more work. Never a breakpoint-hopped
+     size. See docs/UI_UX_SPEC.md §5, §8. */
+  --text--1: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem); /* captions, mono labels */
+  --text-0: clamp(1rem, 0.97rem + 0.15vw, 1.0625rem); /* body */
+  --text-1: clamp(1.125rem, 1.07rem + 0.3vw, 1.25rem); /* lead paragraph */
+  --text-2: clamp(1.375rem, 1.27rem + 0.55vw, 1.625rem); /* h4 */
+  --text-3: clamp(1.75rem, 1.55rem + 1vw, 2.125rem); /* h3 */
+  --text-4: clamp(2.25rem, 1.9rem + 1.75vw, 2.875rem); /* h2 */
+  --text-5: clamp(2.75rem, 2.1rem + 3.25vw, 4rem); /* h1 */
+  --text-6: clamp(3.25rem, 2.3rem + 4.75vw, 5.5rem); /* hero display only */
+
+  /* Spacing scale — 4px base unit, fluid at the section level so vertical
+     rhythm compresses gracefully on short viewports instead of jumping at a
+     breakpoint. */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+  --space-12: 6rem;
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem); /* section vertical padding */
+  --space-gutter: clamp(1.25rem, 1rem + 2vw, 2.5rem); /* section side padding */
+  --content-max: 72rem; /* section inner container */
+  --measure-max: 65ch; /* body copy line length, per spec §5 */
+
+  --radius: 0.5rem;
+  --radius-full: 999px;
 }

@@ -7,9 +7,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Phase 1 — content and SEO architecture.
+Phase 2 — design system in code.
 
 ### Added
+
+- Fluid type scale (`--text--1` … `--text-6`) and spacing scale (`--space-1` …
+  `--space-12`, plus fluid `--space-section`/`--space-gutter`) as tokens in
+  `src/styles/tokens.css`, registered into Tailwind via `@theme inline`. No
+  breakpoint-hopping sizes — every step is `clamp()`-based.
+- Section shell (`.section[data-ground]`, `src/components/Section.astro`): each section
+  declares its own light/dark ground and takes all colours from the matching set. Seam
+  between alternating sections is the brand gradient rule as a 2px hard edge, never a
+  fade.
+- `NodeGraph.astro`: the recurring converging-node-graph device as parameterised inline
+  SVG (`nodeCount`, `density`, `opacity`, `seed`), deterministic via a seeded PRNG. Ported
+  the approach from `ndalamahub_lms_app` `AuthLayout.jsx`.
+- `Nav.astro` and `Footer.astro`: always-rendered link list, no disclosure widget, works
+  identically with JavaScript disabled or on Opera Mini. Real contact/registration
+  content from the approved copy, not placeholders.
+- Button (`.btn-primary`/`.btn-ghost`) and chip (`.chip`) component classes, ground-aware.
+- `/styleguide` route rendering every token, type step and core component — not shipped
+  to production navigation.
+
+### Fixed
+
+- A CSS specificity trap where nesting a `data-ground="dark"` element inside a
+  `data-ground="light"` ancestor let the wrong ground's button/chip colours win on
+  source-order rather than DOM proximity. See `docs/DECISIONS.md`.
+
+Phase 1 — content and SEO architecture.
 
 - `docs/SEO-AUDIT-2026-09.md`: keyword research and content-gap analysis. Confirms the
   security-awareness wedge is the lowest-competition, highest-intent keyword cluster in

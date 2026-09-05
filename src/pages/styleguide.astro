@@ -1,0 +1,142 @@
+---
+/**
+ * Design-system reference. Not shipped to production navigation — the
+ * fastest way to catch drift between docs/UI_UX_SPEC.md and what's actually
+ * built. See docs/BUILD-PLAN.md p2-styleguide.
+ */
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Section from '../components/Section.astro';
+import NodeGraph from '../components/NodeGraph.astro';
+
+const colors = [
+  { name: '--ink', value: '#0B1E2D' },
+  { name: '--cyan', value: '#00A9D6' },
+  { name: '--cyan-deep', value: '#00758F' },
+  { name: '--sap', value: '#A8D93C' },
+  { name: '--slate', value: '#3E5460' },
+  { name: '--steel', value: '#8FA3AE' },
+  { name: '--mist', value: '#E6EDF0' },
+  { name: '--paper', value: '#F6F9FA' },
+];
+
+const typeSteps = [
+  { token: '--text-6', label: 'Hero display' },
+  { token: '--text-5', label: 'H1' },
+  { token: '--text-4', label: 'H2' },
+  { token: '--text-3', label: 'H3' },
+  { token: '--text-2', label: 'H4' },
+  { token: '--text-1', label: 'Lead paragraph' },
+  { token: '--text-0', label: 'Body' },
+  { token: '--text--1', label: 'Caption / mono label' },
+];
+
+const spaceSteps = ['--space-1', '--space-2', '--space-3', '--space-4', '--space-5', '--space-6', '--space-8', '--space-10', '--space-12'];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Styleguide — Nexus Consulting</title>
+  </head>
+  <body class="bg-paper text-ink">
+    <Nav />
+
+    <Section ground="dark">
+      <p class="chip">Styleguide</p>
+      <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5)">
+        Design system reference
+      </h1>
+      <p class="mt-4 max-w-[65ch] font-body" style="color: var(--steel)">
+        Every token, type step and core component built in Phase 2, rendered against the
+        spec in <code>docs/UI_UX_SPEC.md</code>. Not part of the shipped site.
+      </p>
+    </Section>
+
+    <Section ground="light">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Colour</h2>
+      <div class="mt-8 grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr))">
+        {colors.map((c) => (
+          <div>
+            <div class="h-20 rounded-md" style={`background:${c.value}; border:1px solid var(--mist)`}></div>
+            <p class="mt-2 font-mono text-xs uppercase tracking-[0.1em]" style="color: var(--slate)">{c.name}</p>
+            <p class="font-mono text-xs" style="color: var(--steel)">{c.value}</p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section ground="dark">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Type scale</h2>
+      <div class="mt-8 flex flex-col gap-6">
+        {typeSteps.map((step) => (
+          <div class="flex flex-wrap items-baseline gap-4" style="border-bottom: 1px solid color-mix(in srgb, var(--paper) 12%, transparent); padding-bottom: 1.25rem">
+            <p class="font-mono text-xs uppercase tracking-[0.16em] w-40 shrink-0" style="color: var(--cyan)">
+              {step.token} · {step.label}
+            </p>
+            <p class="font-display font-semibold text-balance" style={`font-size: var(${step.token})`}>
+              Precise, not exuberant.
+            </p>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section ground="light">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Spacing scale</h2>
+      <div class="mt-8 flex flex-col gap-3">
+        {spaceSteps.map((step) => (
+          <div class="flex items-center gap-4">
+            <p class="font-mono text-xs w-24 shrink-0" style="color: var(--slate)">{step}</p>
+            <div style={`width: var(${step}); height: 1rem; background: var(--cyan-deep)`}></div>
+          </div>
+        ))}
+      </div>
+    </Section>
+
+    <Section ground="dark">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Node graph device</h2>
+      <p class="mt-2 max-w-[65ch]" style="color: var(--steel)">
+        Parameterised inline SVG — node count, density, opacity, seed. Background device
+        only; it never competes with type. See <code>src/components/NodeGraph.astro</code>.
+      </p>
+      <div class="mt-8 grid gap-6" style="grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr))">
+        <div class="relative h-64 overflow-hidden rounded-md" style="background: var(--ink)">
+          <NodeGraph class="absolute inset-0 h-full w-full" nodeCount={9} density={0.35} opacity={1} seed={1} ground="dark" />
+          <p class="absolute bottom-3 left-3 font-mono text-xs uppercase tracking-[0.1em]" style="color: var(--steel)">nodeCount=9 seed=1</p>
+        </div>
+        <div class="relative h-64 overflow-hidden rounded-md" style="background: var(--ink)">
+          <NodeGraph class="absolute inset-0 h-full w-full" nodeCount={14} density={0.6} opacity={0.8} seed={7} ground="dark" />
+          <p class="absolute bottom-3 left-3 font-mono text-xs uppercase tracking-[0.1em]" style="color: var(--steel)">nodeCount=14 seed=7</p>
+        </div>
+        <div class="relative h-64 overflow-hidden rounded-md" style="background: var(--paper); border: 1px solid var(--mist)">
+          <NodeGraph class="absolute inset-0 h-full w-full" nodeCount={6} density={0.2} opacity={0.6} seed={3} ground="light" />
+          <p class="absolute bottom-3 left-3 font-mono text-xs uppercase tracking-[0.1em]" style="color: var(--steel)">ground=light</p>
+        </div>
+      </div>
+    </Section>
+
+    <Section ground="light">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Buttons &amp; chips — light</h2>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="#" class="btn btn-primary">Primary action</a>
+        <a href="#" class="btn btn-ghost">Ghost action</a>
+        <span class="chip">Mono chip</span>
+      </div>
+    </Section>
+
+    <Section ground="dark">
+      <h2 class="font-display font-bold" style="font-size: var(--text-4)">Buttons &amp; chips — dark</h2>
+      <div class="mt-8 flex flex-wrap items-center gap-4">
+        <a href="#" class="btn btn-primary">Primary action</a>
+        <a href="#" class="btn btn-ghost">Ghost action</a>
+        <span class="chip">Mono chip</span>
+      </div>
+    </Section>
+
+    <Footer />
+  </body>
+</html>

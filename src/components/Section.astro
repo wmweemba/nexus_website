@@ -1,0 +1,19 @@
+---
+/**
+ * Section shell — declares its ground (dark/light) and renders a centred
+ * container inside it. See docs/UI_UX_SPEC.md §3 and .section in global.css.
+ */
+interface Props {
+  ground: 'dark' | 'light';
+  id?: string;
+  class?: string;
+}
+
+const { ground, id, class: className } = Astro.props;
+---
+
+<section class:list={['section', className]} data-ground={ground} id={id}>
+  <div class="container">
+    <slot />
+  </div>
+</section>
