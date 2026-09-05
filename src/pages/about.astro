@@ -1,0 +1,150 @@
+---
+/**
+ * About — `/about/`. Per docs/copy/about.md. Delivery capacity is William
+ * alone; Elias's CTO title is real but silent, Farai a non-operational
+ * director. Do not imply a department — the honest small-team framing is
+ * deliberate (docs/BUILD-PLAN.md p5-about).
+ */
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import Section from '../components/Section.astro';
+import Reveal from '../components/Reveal.astro';
+
+const facts = [
+  'Trading since 2017',
+  'Incorporated 2020 · PACRA 120200003611',
+  'TPIN 2102195513',
+  'Based in Rhodes Park, Lusaka',
+];
+
+const team = [
+  { name: 'William S. Mweemba', title: 'Managing Consultant', note: 'Delivers the work.' },
+  { name: 'Elias Mulenga', title: 'Chief Technology Officer' },
+  { name: 'Farai Liwewe', title: 'Director' },
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="Nexus Consulting Services Limited — running IT for Zambian businesses since 2017. Incorporated 2020, PACRA 120200003611, based in Rhodes Park, Lusaka."
+    />
+    <title>About — Nexus Consulting Services</title>
+  </head>
+  <body class="bg-paper text-ink">
+    <Nav />
+
+    <main>
+      <Section ground="dark" id="about-header">
+        <Reveal as="div">
+          <p class="chip">Who we are</p>
+          <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5); max-width: 22ch">
+            IT that has to stand up to scrutiny
+          </h1>
+
+          <div class="mt-8 max-w-[65ch]" style="color: var(--steel)">
+            <p>
+              We have run IT for Zambian businesses since 2017 — building the websites,
+              hosting the systems and securing the infrastructure that small and mid-sized
+              organisations depend on but rarely have the in-house depth to manage.
+            </p>
+            <p class="mt-4">
+              Most of our clients answer to someone. A regulator, an auditor, a board, or a
+              customer who wants to know where their data is kept. That work has a
+              different shape from ordinary IT support: the question is not only whether a
+              control works, but whether you can demonstrate that it works, to someone
+              whose job is to doubt you.
+            </p>
+            <p class="mt-4">
+              That is the gap we are built for. We deploy open-source and commodity
+              technology to the standard a supervised institution needs, then document it
+              the way an examiner expects to read it. We stay on to run it afterwards. The
+              result costs a fraction of the international platforms and produces the same
+              evidence.
+            </p>
+          </div>
+
+          <blockquote class="about-pullquote mt-10">
+            <p style="font-size: var(--text-2)">
+              We are small on purpose. You deal with the person who does the work, not an
+              account manager who relays it.
+            </p>
+          </blockquote>
+
+          <p class="mt-8 max-w-[65ch]" style="color: var(--steel)">
+            Nexus has traded since 2017 and incorporated as a limited company in 2020. We
+            are not a reseller — we build, configure and operate what we sell, and we hold
+            the relationship afterwards.
+          </p>
+
+          <div class="fact-strip mt-8">
+            {facts.map((fact) => (
+              <span class="font-mono" style="font-size: var(--text--1); color: var(--steel)">{fact}</span>
+            ))}
+          </div>
+        </Reveal>
+      </Section>
+
+      <Section ground="light" id="team">
+        <Reveal as="div">
+          <p class="chip">Team</p>
+          <h2 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-4)">
+            Three people, named
+          </h2>
+        </Reveal>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {team.map((person) => (
+            <Reveal as="div" class="team-card">
+              <h3 class="font-display font-semibold" style="font-size: var(--text-1)">{person.name}</h3>
+              <p class="mt-1 font-mono" style="font-size: var(--text--1); text-transform: uppercase; letter-spacing: 0.1em; color: var(--cyan-deep)">
+                {person.title}
+              </p>
+              {person.note && <p class="mt-3" style="color: var(--slate)">{person.note}</p>}
+            </Reveal>
+          ))}
+        </div>
+      </Section>
+
+      <Section ground="dark" id="close">
+        <Reveal as="div">
+          <h2 class="font-display font-bold text-balance" style="font-size: var(--text-4); max-width: 20ch">
+            Start with the scoping call.
+          </h2>
+          <a href="/contact/" class="btn btn-primary mt-8">Book a scoping call</a>
+        </Reveal>
+      </Section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .about-pullquote {
+    max-width: 44ch;
+    border-inline-start: 2px solid var(--cyan);
+    padding-inline-start: var(--space-5);
+    font-family: var(--font-display);
+    font-weight: 600;
+  }
+
+  .fact-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-6);
+  }
+
+  .team-card {
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--mist);
+  }
+</style>

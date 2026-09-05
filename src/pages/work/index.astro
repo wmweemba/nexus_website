@@ -1,0 +1,158 @@
+---
+/**
+ * Work — `/work/`. Case-study index per docs/copy/work.md. Published
+ * collection entries (src/content/case-studies) get a linked card; the
+ * security-awareness programme and the retainer book are summary-only cards
+ * with no dedicated page, per the copy draft.
+ */
+import { getCollection } from 'astro:content';
+import '../../styles/global.css';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Section from '../../components/Section.astro';
+import Reveal from '../../components/Reveal.astro';
+
+const caseStudies = (await getCollection('case-studies', ({ data }) => data.published)).sort(
+  (a, b) => a.data.order - b.data.order,
+);
+
+const sectors = [
+  'Microfinance & lending',
+  'Professional services',
+  'Food production & retail',
+  'NGOs & associations',
+];
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta
+      name="description"
+      content="A representative sample of what Nexus has built: lending management systems, a security-awareness programme run inside a Bank of Zambia-supervised institution, and business websites on annual retainer."
+    />
+    <title>Work — Nexus Consulting Services</title>
+  </head>
+  <body class="bg-paper text-ink">
+    <Nav />
+
+    <main>
+      <Section ground="light" id="work-header">
+        <Reveal as="div">
+          <p class="chip">Selected work</p>
+          <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5); max-width: 22ch">
+            What we have actually built
+          </h1>
+          <p class="mt-6 max-w-[55ch]" style="color: var(--slate)">
+            A representative sample rather than a full list. References available on
+            request.
+          </p>
+        </Reveal>
+
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
+          {caseStudies.map((study) => (
+            <Reveal as="div" class="work-card">
+              <a href={`/work/${study.id}/`} class="work-card-link">
+                <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--cyan-deep)">
+                  {study.data.sector.replace(/-/g, ' ')}
+                </p>
+                <h2 class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">{study.data.title}</h2>
+                <p class="mt-2" style="color: var(--slate)">{study.data.summary}</p>
+              </a>
+            </Reveal>
+          ))}
+
+          <Reveal as="div" class="work-card">
+            <div class="work-card-static">
+              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--steel)">
+                Security awareness programme
+              </p>
+              <h2 class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">Built in-house, BoZ-supervised institution</h2>
+              <p class="mt-2" style="color: var(--slate)">
+                Our managing consultant designed, deployed and ran a phishing-simulation and
+                awareness programme on open-source foundations, integrated with the
+                institution's directory and mail platform. It closed the regulatory finding
+                it was commissioned for.
+              </p>
+              <a href="/services/security-awareness/" class="work-card-cta mt-3">Read about the programme →</a>
+            </div>
+          </Reveal>
+
+          <Reveal as="div" class="work-card">
+            <div class="work-card-static">
+              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--steel)">
+                Business websites & hosting
+              </p>
+              <h2 class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">Ongoing retainers</h2>
+              <p class="mt-2" style="color: var(--slate)">
+                Around ten organisations across food production, professional services and
+                consulting are hosted and maintained on annual retainers, several since
+                2019.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+
+        <div class="mt-12 flex flex-wrap gap-3" aria-label="Sectors served">
+          {sectors.map((sector) => (
+            <span class="chip" style="background: var(--mist); color: var(--cyan-deep)">{sector}</span>
+          ))}
+        </div>
+
+        <a href="/contact/" class="btn btn-primary mt-10">Start with the scoping call</a>
+      </Section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .work-card {
+    height: 100%;
+  }
+
+  .work-card-link,
+  .work-card-static {
+    display: block;
+    height: 100%;
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    background: var(--mist);
+  }
+
+  .work-card-link {
+    text-decoration: none;
+    color: inherit;
+    transition: transform 0.15s ease;
+  }
+
+  .work-card-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .work-card-cta {
+    display: inline-block;
+    color: var(--cyan-deep);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+  }
+
+  .work-card-cta:hover {
+    border-bottom-color: var(--cyan-deep);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-card-link {
+      transition: none;
+    }
+
+    .work-card-link:hover {
+      transform: none;
+    }
+  }
+</style>

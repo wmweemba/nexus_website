@@ -1,0 +1,96 @@
+---
+/**
+ * Case-study detail — `/work/[slug]/`. Renders published entries from the
+ * case-studies content collection (src/content.config.ts). Unpublished
+ * entries never get a static path, so there is no way to reach one by URL.
+ */
+import { getCollection, render } from 'astro:content';
+import '../../styles/global.css';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Section from '../../components/Section.astro';
+import Reveal from '../../components/Reveal.astro';
+
+export async function getStaticPaths() {
+  const caseStudies = await getCollection('case-studies', ({ data }) => data.published);
+  return caseStudies.map((study) => ({
+    params: { slug: study.id },
+    props: { study },
+  }));
+}
+
+const { study } = Astro.props;
+const { Content } = await render(study);
+
+const sectorLabel = study.data.sector.replace(/-/g, ' ');
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="description" content={study.data.summary} />
+    <title>{study.data.title} — Nexus Consulting Services</title>
+  </head>
+  <body class="bg-paper text-ink">
+    <Nav />
+
+    <main>
+      <Section ground="dark" id="case-header">
+        <Reveal as="div">
+          <p class="chip">{sectorLabel}</p>
+          <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5); max-width: 20ch">
+            {study.data.title}
+          </h1>
+          <p class="mt-4 font-mono" style="font-size: var(--text--1); color: var(--steel)">{study.data.client}</p>
+        </Reveal>
+      </Section>
+
+      <Section ground="light" id="case-body">
+        <Reveal as="div" class="case-content">
+          <Content />
+        </Reveal>
+
+        <a href="/work/" class="btn btn-ghost mt-10">Back to work</a>
+      </Section>
+
+      <Section ground="dark" id="close">
+        <Reveal as="div">
+          <h2 class="font-display font-bold text-balance" style="font-size: var(--text-4); max-width: 20ch">
+            Start with the scoping call.
+          </h2>
+          <p class="mt-4 max-w-[55ch]" style="color: var(--steel)">
+            If you are carrying a finding, renewing a website, or simply unsure whether your
+            current setup would survive being looked at closely — that first conversation
+            costs you nothing and usually tells you what you need to know.
+          </p>
+          <a href="/contact/" class="btn btn-primary mt-8">Book a scoping call</a>
+        </Reveal>
+      </Section>
+    </main>
+
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .case-content {
+    max-width: 65ch;
+  }
+
+  .case-content :global(p) {
+    margin-top: var(--space-4);
+    color: var(--slate);
+  }
+
+  .case-content :global(p:first-child) {
+    margin-top: 0;
+  }
+
+  .case-content :global(strong) {
+    color: var(--ink);
+  }
+</style>

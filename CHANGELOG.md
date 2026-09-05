@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Phase 5 — remaining pages.
+
+### Added
+
+- `src/pages/services.astro`: services overview (`/services/`) — six service blocks in a
+  dark grid, the five-step "how we work" process, and the three quoting shapes, from
+  `docs/copy/services.md`.
+- `src/pages/services/security-awareness.astro`: the wedge page
+  (`/services/security-awareness/`) — the highest-priority page from the SEO audit, with
+  its own title tag and meta description targeting the compliance keyword cluster rather
+  than the general web-design one. From `docs/copy/security-awareness.md`.
+- `src/pages/work/index.astro` and `src/pages/work/[slug].astro`: the case-study index and
+  detail template, driven by `getCollection`/`getStaticPaths` over the `case-studies`
+  content collection — only entries with `published: true` get a static path or a card.
+  NdalamaHub and ManifiPay are both published; the security-awareness programme and the
+  retainer book remain summary-only cards with no dedicated page, per
+  `docs/copy/work.md`.
+- `src/pages/about.astro`: about page (`/about/`) — three named team members, no implied
+  department, delivery capacity attributed to William alone. From `docs/copy/about.md`.
+- `src/pages/contact.astro`: contact page (`/contact/`) — a `mailto:` CTA as the sole,
+  no-JS submission mechanism (no form backend), plus direct team emails. From
+  `docs/copy/contact.md`. See `docs/DECISIONS.md` for why a form-backend service and a
+  `mailto:`-action `<form>` were both ruled out.
+
+### Changed
+
+- `src/content/case-studies/manifipay.md`: flipped `published: false` → `true` — client
+  consent confirmed (`p5-consent`). See `docs/DECISIONS.md`.
+
+### Verified
+
+- `npm run budget`: critical path 4.6 KB / 100 KB, 0 JS files in `dist`, fonts
+  75.1 KB / 80 KB — passed.
+- NS-010 grep against `dist/**/*.css`: no dead `bg-[--token]` output.
+- `npm run build`: all 9 routes generate cleanly, including the two dynamic
+  `/work/[slug]/` paths.
+- All five new pages rendered and read back via the accessibility tree /
+  page-text extraction — content matches the approved copy, no department implied on
+  `/about/`, both case studies present on `/work/`.
+
 Phase 4 — home page.
 
 ### Added

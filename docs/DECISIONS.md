@@ -7,6 +7,36 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-05 — ManifiPay case study published; client consent confirmed
+
+`p5-consent`. `src/content/case-studies/manifipay.md` was drafted with `published: false`
+pending written client consent to be named publicly (per the build plan gate). Consent was
+confirmed before `p5-casestudy`, so the entry is flipped to `published: true` and
+`/work/manifipay/` is built alongside `/work/ndalamahub/`, both routed through the same
+`getStaticPaths` in `src/pages/work/[slug].astro`.
+
+**Rules out:** shipping `/work/` with NdalamaHub as the only linked case study, which was
+the fallback the build plan specified if consent had not landed yet.
+
+## 2026-09-05 — Contact page: mailto is the only submission mechanism, no form backend
+
+`p5-contact`. A static site with no server has nothing to receive a form `POST`, and the
+only real alternative — a hosted form backend (Formspree or similar) — is a third-party
+account this repo doesn't have and a dependency CLAUDE.md's zero-JS/zero-third-party
+posture doesn't ask for. `/contact/` instead leads with a `mailto:` link
+(`mailto:info@mynexusgroup.com?subject=...&body=...`) as the primary CTA, prefilled with a
+subject and a body template, plus a checklist of what to include. This is functional with
+zero JavaScript, no external account, and no broken submit — the risk a same-page `<form
+method="GET" action="mailto:">` carries, since mail clients only honour a handful of
+recognised keys (`subject`, `body`, `cc`) and silently drop named fields like
+"organisation," producing an email that looks like it worked but arrives incomplete.
+
+**Rules out:** a real `<form>` posting anywhere (no backend to receive it), and a
+`mailto:`-action form with named fields (silently drops data the visitor thinks they sent).
+**Revisit:** if a hosted form service is ever justified for another reason, wire the same
+fields into it as a progressive enhancement — the mailto CTA should stay as the no-JS
+fallback either way.
+
 ## 2026-09-05 — Home page: BazaBooks phone illustrates "Business systems", not "Selected work"
 
 `p4-assemble`. `docs/copy/home.md` never names BazaBooks — the phone showcase built in
