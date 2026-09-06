@@ -11,6 +11,7 @@ import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
 import Section from '../components/Section.astro';
 import Reveal from '../components/Reveal.astro';
+import Seo from '../components/Seo.astro';
 
 const team = [
   { name: 'William S. Mweemba', title: 'Managing Consultant', email: 'william@mynexusgroup.com' },
@@ -33,16 +34,11 @@ const scopingMailto = `mailto:info@mynexusgroup.com?subject=${scopingSubject}&bo
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Start with a free, thirty-minute scoping call. No charge, no obligation. Write to info@mynexusgroup.com or call +260 954 156 056."
+    <Seo
+      title="Contact — Nexus Consulting Services"
+      description="Start with a free, thirty-minute scoping call. No charge, no obligation. Write to info@mynexusgroup.com or call +260 954 156 056."
+      breadcrumbs={[{ name: 'Home', path: '/' }, { name: 'Contact', path: '/contact/' }]}
     />
-    <title>Contact — Nexus Consulting Services</title>
   </head>
   <body class="bg-paper text-ink">
     <Nav />

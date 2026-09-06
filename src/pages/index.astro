@@ -14,6 +14,7 @@ import NodeGraph from '../components/NodeGraph.astro';
 import Reveal from '../components/Reveal.astro';
 import PhoneShowcase from '../components/PhoneShowcase.astro';
 import HorizontalScroll from '../components/HorizontalScroll.astro';
+import Seo from '../components/Seo.astro';
 
 const services = [
   {
@@ -45,18 +46,13 @@ const services = [
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Compliance-driven IT for Zambian businesses that answer to a regulator: security awareness and phishing-simulation programmes, Microsoft 365 and infrastructure, web and business-systems development, managed hosting, and ICT procurement."
+    <Seo
+      title="Nexus Consulting Services — IT that has to stand up to scrutiny"
+      description="Compliance-driven IT for Zambian businesses that answer to a regulator: security awareness and phishing-simulation programmes, Microsoft 365 and infrastructure, web and business-systems development, managed hosting, and ICT procurement."
+      breadcrumbs={[{ name: 'Home', path: '/' }]}
     />
     <link rel="preload" href="/fonts/sora-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="/fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin />
-    <title>Nexus Consulting Services — IT that has to stand up to scrutiny</title>
   </head>
   <body class="bg-paper text-ink">
     <Nav />

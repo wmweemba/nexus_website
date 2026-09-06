@@ -1,0 +1,84 @@
+---
+/**
+ * Shared <head> block: favicons, viewport, title/description, canonical,
+ * Open Graph, Twitter Card, and the sitewide ProfessionalService JSON-LD.
+ * A page passes `breadcrumbs` for its own BreadcrumbList entry and
+ * `serviceSchema` for a Service JSON-LD block where it applies (currently
+ * only /services/security-awareness/). See docs/DECISIONS.md — p6-schema.
+ */
+interface Breadcrumb {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  title: string;
+  description: string;
+  breadcrumbs?: Breadcrumb[];
+  serviceSchema?: Record<string, unknown>;
+  noindex?: boolean;
+}
+
+const { title, description, breadcrumbs, serviceSchema, noindex = false } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site).href;
+const ogImageUrl = new URL('/images/og-cover.webp', Astro.site).href;
+
+const organizationSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: 'Nexus Consulting Services Limited',
+  url: 'https://mynexusgroup.com',
+  telephone: '+260954156056',
+  email: 'info@mynexusgroup.com',
+  foundingDate: '2017',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Plot 9 Katopola Road, Rhodes Park',
+    addressLocality: 'Lusaka',
+    addressCountry: 'ZM',
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'Zambia',
+  },
+  identifier: 'PACRA 120200003611',
+};
+
+const breadcrumbSchema = breadcrumbs && {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: breadcrumbs.map((crumb, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: crumb.name,
+    item: new URL(crumb.path, Astro.site).href,
+  })),
+};
+---
+
+<meta charset="utf-8" />
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+<link rel="icon" href="/favicon.ico" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="generator" content={Astro.generator} />
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonicalUrl} />
+{noindex && <meta name="robots" content="noindex" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:url" content={canonicalUrl} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={ogImageUrl} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImageUrl} />
+
+<script type="application/ld+json" set:html={JSON.stringify(organizationSchema)} />
+{breadcrumbSchema && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />}
+{serviceSchema && <script type="application/ld+json" set:html={JSON.stringify(serviceSchema)} />}

@@ -1,0 +1,99 @@
+# Nexus Consulting Services Limited
+
+> A Zambian IT consultancy in Lusaka that builds, configures and operates the
+> infrastructure regulated businesses need to demonstrate compliance to a
+> regulator, auditor or board - not just have it work.
+
+Nexus has traded since 2017 and incorporated as a limited company in 2020
+(PACRA 120200003611). It is a small, hands-on team - the managing consultant
+delivers the work directly rather than routing it through account managers.
+Most clients are Zambian businesses that answer to someone: a banking or
+microfinance regulator, an auditor, a board, or a customer asking where its
+data is kept.
+
+## Services
+
+- Cyber security & compliance: security awareness and phishing-simulation
+  programmes, gap assessments, policy packs, incident-response plans, and the
+  documentation an examiner expects.
+- Microsoft 365 & infrastructure: tenant hardening, MFA and Conditional
+  Access, Microsoft Defender, mail-flow and email authentication, firewall
+  hardening, site-to-site VPN, and 3CX telephony.
+- Web design & development: business websites built to load quickly on a
+  Zambian mobile connection, structured to be found in search, handed over
+  with full credentials and documentation.
+- Hosting & domains: managed hosting on infrastructure Nexus operates,
+  domain registration and renewal, business email, SSL, backups and
+  monitoring, billed as an annual retainer.
+- Business systems: custom software where an off-the-shelf product doesn't
+  fit - a loan management system and a credit-risk dashboard are both live
+  in production today.
+- ICT supply & procurement: hardware, licensing and network equipment
+  sourced and configured, ready to use rather than ready to unbox.
+
+## The security-awareness programme
+
+Nexus's flagship offering. Every regulated lender in Zambia carries some
+version of the same audit finding: staff security awareness is not being
+measured. The platforms built to close it are priced per seat in US dollars,
+which is not viable for a sixty-person microfinance institution. Nexus's
+managing consultant built an affordable, open-source-based alternative and
+ran it inside a Bank of Zambia-supervised institution, where it closed the
+finding it was commissioned for. Nexus now deploys and operates that
+programme for clients: monthly phishing simulation, automatic remedial
+training for anyone who fails a simulation, new-joiner security onboarding,
+and quarterly content refresh - all with no per-seat fee and no forex
+exposure. Full detail: https://mynexusgroup.com/services/security-awareness/
+
+## How engagements work
+
+1. A short, free scoping call establishes what needs fixing, by when, and
+   for whom.
+2. Before any commitment, the client gets something concrete and free: a
+   findings sheet on their current exposure, or a working site mock-up.
+3. Scope and price are agreed in writing before work starts. Nexus does not
+   bill by the hour.
+4. Delivery includes documentation, credentials and administrative access -
+   clients are never locked in by Nexus holding a password.
+5. An ongoing retainer, if one is needed, is a separate decision taken after
+   delivery.
+
+## Selected work
+
+- NdalamaHub - a full loan management platform for a collateral-backed
+  lender: borrower intake, application review queue, disbursement controls,
+  a rollover engine, a collateral register, and a portfolio/NPL dashboard.
+  Live in production. https://mynexusgroup.com/work/ndalamahub/
+- ManifiPay - public website for a Lusaka lender, wired directly into their
+  loan system so an online enquiry becomes a reviewable application without
+  re-typing. https://mynexusgroup.com/work/manifipay/
+- A security-awareness programme run inside a Bank of Zambia-supervised
+  institution (unnamed - the institution's control environment is sensitive;
+  named on request with client consent).
+- Around ten organisations across food production, professional services
+  and consulting are hosted and maintained on annual retainers, several
+  since 2019.
+
+## Who Nexus serves
+
+Microfinance and lending institutions, professional services firms, food
+production and retail businesses, and NGOs and associations - concentrated
+in Zambia, with the compliance-driven work concentrated in Bank of
+Zambia-supervised lenders.
+
+## Contact
+
+- Address: Plot 9 Katopola Road, Rhodes Park, Lusaka, Zambia
+- Phone: +260 954 156 056
+- Email: info@mynexusgroup.com
+- Website: https://mynexusgroup.com
+
+## Key facts
+
+- Trading since 2017; incorporated 2020; PACRA registration 120200003611.
+- Not a reseller - Nexus builds, configures and operates what it sells, and
+  holds the client relationship afterwards rather than handing off to a
+  vendor.
+- Delivery capacity is one person, the managing consultant, William S.
+  Mweemba - Nexus is deliberately small rather than a large team relaying
+  work through account managers.

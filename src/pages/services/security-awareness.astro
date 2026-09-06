@@ -9,6 +9,29 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Section from '../../components/Section.astro';
 import Reveal from '../../components/Reveal.astro';
+import Seo from '../../components/Seo.astro';
+
+const serviceSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType: 'Security awareness and phishing simulation',
+  name: 'Security awareness and phishing-simulation programme',
+  description:
+    "Monthly phishing simulation, automatic remedial training, new-joiner onboarding and quarterly content refresh, built to close the staff-security-awareness finding under the Bank of Zambia's Cyber and Information Risk Management Guidelines.",
+  provider: {
+    '@type': 'ProfessionalService',
+    name: 'Nexus Consulting Services Limited',
+    url: 'https://mynexusgroup.com',
+  },
+  areaServed: {
+    '@type': 'Country',
+    name: 'Zambia',
+  },
+  audience: {
+    '@type': 'Audience',
+    audienceType: 'Bank of Zambia-supervised financial institutions',
+  },
+};
 
 const included = [
   {
@@ -32,16 +55,16 @@ const included = [
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Close the staff-security-awareness audit finding without a per-seat US-dollar licence. Monthly phishing simulation, automatic remedial training, and reporting built for the Bank of Zambia's Cyber and Information Risk Management Guidelines."
+    <Seo
+      title="Security Awareness & Phishing Simulation for Zambian Lenders | Nexus Consulting"
+      description="Close the staff-security-awareness audit finding without a per-seat US-dollar licence. Monthly phishing simulation, automatic remedial training, and reporting built for the Bank of Zambia's Cyber and Information Risk Management Guidelines."
+      breadcrumbs={[
+        { name: 'Home', path: '/' },
+        { name: 'Services', path: '/services/' },
+        { name: 'Security Awareness', path: '/services/security-awareness/' },
+      ]}
+      serviceSchema={serviceSchema}
     />
-    <title>Security Awareness & Phishing Simulation for Zambian Lenders | Nexus Consulting</title>
   </head>
   <body class="bg-paper text-ink">
     <Nav />

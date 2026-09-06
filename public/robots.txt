@@ -1,0 +1,72 @@
+# robots.txt - Nexus Consulting Services
+# Last updated: 2026-09-06
+
+# General crawlers - full access
+User-agent: *
+Allow: /
+Disallow: /styleguide/
+
+# OpenAI
+User-agent: GPTBot
+Allow: /
+Disallow: /styleguide/
+
+User-agent: OAI-SearchBot
+Allow: /
+Disallow: /styleguide/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /styleguide/
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+Disallow: /styleguide/
+
+User-agent: Claude-SearchBot
+Allow: /
+Disallow: /styleguide/
+
+User-agent: Claude-User
+Allow: /
+Disallow: /styleguide/
+
+# Perplexity
+User-agent: PerplexityBot
+Allow: /
+Disallow: /styleguide/
+
+# Google
+User-agent: Googlebot
+Allow: /
+Disallow: /styleguide/
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+Disallow: /styleguide/
+
+# Bing
+User-agent: Bingbot
+Allow: /
+Disallow: /styleguide/
+
+# Amazon (Alexa, AWS)
+User-agent: Amazonbot
+Allow: /
+Disallow: /styleguide/
+
+# Apple (Siri, Spotlight)
+User-agent: Applebot
+Allow: /
+Disallow: /styleguide/
+
+# Common Crawl
+User-agent: CCBot
+Allow: /
+Disallow: /styleguide/
+
+Sitemap: https://mynexusgroup.com/sitemap.xml

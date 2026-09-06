@@ -7,6 +7,53 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Phase 6 — findability.
+
+### Added
+
+- `src/components/Seo.astro`: shared `<head>` partial — canonical URL, Open Graph, Twitter
+  Card, the sitewide `ProfessionalService` JSON-LD (real PACRA 120200003611, address,
+  phone), a per-page `BreadcrumbList`, and an optional `Service` JSON-LD block. Adopted
+  across all 8 shipped routes, replacing each page's hand-written `<head>` boilerplate.
+- `src/pages/sitemap.xml.ts`: sitemap generated from the `case-studies` collection at
+  build time rather than a hand-maintained static file, so it can't drift when a case
+  study is published or unpublished. See `docs/DECISIONS.md`.
+- `public/robots.txt`: allows every general and AI-vendor crawler verified live against
+  the `online-visibility` skill's crawler reference (GPTBot/OAI-SearchBot/ChatGPT-User,
+  ClaudeBot/Claude-SearchBot/Claude-User, PerplexityBot, Googlebot/Google-Extended/
+  GoogleOther, Bingbot, Amazonbot, Applebot, CCBot), disallows `/styleguide/`.
+- `public/llms.txt`: plain-language company summary for AI systems — services, the
+  security-awareness programme, how engagements work, selected work, contact.
+- `docs/REDIRECTS.md`: the old-WordPress-site redirect/410 map (`p6-redirects`) —
+  confirmed against the live site's own Yoast sitemap rather than guessed. `/about/` and
+  `/contact/` need no redirect (same path on both sites); `/scan/`, `/ncs/`, `/3cx/` and
+  the three blog posts get `410 Gone`. Not wired up yet — this repo has no web-server
+  config until `p8-deploy`; the file is the spec for that phase.
+
+### Fixed
+
+- A charset bug found live: `public/robots.txt` and `public/llms.txt` are served as
+  `Content-Type: text/plain` with no `charset` parameter, so a browser without an explicit
+  charset mis-rendered every em dash as mojibake. Fixed by using ASCII hyphens in both
+  files instead of depending on a future server config to add the header. See
+  `docs/DECISIONS.md`.
+
+### Verified
+
+- `npm run budget`: critical path 4.6 KB / 100 KB, 0 JS files in `dist`, fonts
+  75.1 KB / 80 KB — passed.
+- NS-010 grep against `dist/**/*.css`: no dead `bg-[--token]` output.
+- `npm run build`: all 9 routes generate cleanly, including the dynamic `sitemap.xml`
+  endpoint.
+- Every page's JSON-LD validated as parseable JSON (`node -e "JSON.parse(...)"` against
+  each built HTML file) — 2 blocks per page (Organization + Breadcrumb), 3 on
+  `/services/security-awareness/` (plus Service).
+- `robots.txt`, `llms.txt` and `sitemap.xml` rendered and read back in the browser against
+  both the dev server and a fresh `npm run build` — confirmed the em-dash fix holds and
+  the sitemap is valid XML with all 8 canonical URLs.
+- `og:image` referenced at `/images/og-cover.webp` does not yet exist — flagged as an
+  out-of-codebase action (see report to William), not faked with a placeholder.
+
 Phase 5 — remaining pages.
 
 ### Added

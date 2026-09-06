@@ -7,6 +7,36 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-06 — sitemap.xml is a generated endpoint, not a static file
+
+`p6-visibility`. `src/pages/sitemap.xml.ts` builds the URL list from `getCollection`
+against the `case-studies` collection at build time, rather than a hand-maintained
+`public/sitemap.xml`. The collection is the one piece of site content the build plan
+explicitly expects to grow (`src/content.config.ts`'s own comment says as much) — a static
+file would silently drift the first time a case study is added or unpublished. Astro
+prerenders the endpoint to a static file at build time since the whole site builds with
+`output: 'static'`, so this costs nothing at runtime.
+
+**Rules out:** a hand-maintained `public/sitemap.xml`, which is what `robots.txt` and
+`llms.txt` are — those only ever reference fixed metadata (crawler names, the company
+description), nothing that changes when a case study is added.
+
+## 2026-09-06 — Plain-text SEO files use ASCII hyphens, not em dashes
+
+`p6-visibility`. `public/robots.txt` and `public/llms.txt` are served with
+`Content-Type: text/plain` and no `charset` parameter (confirmed via `curl -sI` against
+both the Astro dev server and the built `dist/` output) — browsers without an explicit
+charset fall back to guessing, and rendered every em dash in both files as `â€"` mojibake.
+HTML pages are unaffected (`<meta charset="utf-8">` in `Seo.astro` settles it explicitly),
+and the sitemap XML declares its own `encoding="UTF-8"` regardless of the HTTP header. Since
+this repo has no web-server config yet to fix the header at the source (`p8-deploy`), the
+two plain-text files were rewritten with ASCII `-` instead of `—` — a fix that holds
+regardless of whatever server ships in Phase 8.
+
+**Rules out:** relying on Phase 8's eventual server config to add
+`Content-Type: text/plain; charset=utf-8` — cheaper to make the files immune to the
+problem now than to depend on a config decision three phases away.
+
 ## 2026-09-05 — ManifiPay case study published; client consent confirmed
 
 `p5-consent`. `src/content/case-studies/manifipay.md` was drafted with `published: false`

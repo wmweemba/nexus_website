@@ -10,6 +10,7 @@ import Nav from '../../components/Nav.astro';
 import Footer from '../../components/Footer.astro';
 import Section from '../../components/Section.astro';
 import Reveal from '../../components/Reveal.astro';
+import Seo from '../../components/Seo.astro';
 
 export async function getStaticPaths() {
   const caseStudies = await getCollection('case-studies', ({ data }) => data.published);
@@ -27,13 +28,15 @@ const sectorLabel = study.data.sector.replace(/-/g, ' ');
 
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="icon" href="/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={study.data.summary} />
-    <title>{study.data.title} — Nexus Consulting Services</title>
+    <Seo
+      title={`${study.data.title} — Nexus Consulting Services`}
+      description={study.data.summary}
+      breadcrumbs={[
+        { name: 'Home', path: '/' },
+        { name: 'Work', path: '/work/' },
+        { name: study.data.title, path: `/work/${study.id}/` },
+      ]}
+    />
   </head>
   <body class="bg-paper text-ink">
     <Nav />
