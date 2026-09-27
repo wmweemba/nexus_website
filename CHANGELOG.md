@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+Phase 7 — verification.
+
+### Fixed
+
+- `--steel` (#8fa3ae) used as caption/label text on light-ground sections gave a 2.48:1
+  contrast ratio — fails WCAG AA 1.4.3 (needs 4.5:1). Swapped to `--slate` (7.51:1) at
+  every light-ground occurrence: `src/pages/index.astro`, `services.astro`, `work/index.astro`,
+  `contact.astro`. `--steel` on dark grounds (6.48:1) was already fine and is unchanged —
+  found by `a11y --full`, computed from the literal token hex values, then verified live
+  (computed style on the rendered page). See `docs/DECISIONS.md`.
+
+### Added
+
+- `docs/perf-baseline-2026-09-06.md`: first recorded performance baseline. `pa --full` —
+  build-size budget passes with large headroom (4.6 KB / 100 KB critical path), Lighthouse
+  mobile-simulated LCP 1.4s on both home and `/services/security-awareness/`, CLS 0 on
+  both. No critical or moderate findings.
+- `docs/qa-baseline-2026-09-06/`: first QA visual baseline (`qa --full`) — 5 screenshots
+  across 3 viewports on the critical path (home, security-awareness, contact). Full
+  smoke walk of the critical path (home → security-awareness → work → case study → about
+  → contact) with zero console errors. No auth mechanism to test.
+
+### Security
+
+- `p7-sec` (`/sec --full`, run directly by William): 0 P0, 1 P1, 2 P2 — clear to deploy
+  Phase 7 work. Supply chain, secrets hygiene, and framework CVE checks all clean (Astro
+  7.3.1 confirmed current against 2026 advisories; 0 lifecycle scripts across all 397
+  packages; `gitleaks` found no leaks). The one P1 — CSP / `X-Frame-Options` /
+  `X-Content-Type-Options` have nowhere to be set yet, since no Coolify/reverse-proxy
+  config exists in this repo — is real but belongs to `p8-deploy`, not this phase; the
+  header block to apply is recorded for that step. Both P2s (no `.npmrc` hardening, no
+  `.dockerignore`) are pre-existing Phase 0 deferrals, re-confirmed rather than new.
+
+### Decided
+
+- No PWA / offline shell for this site this cycle — assessed on evidence (`pwa` skill,
+  Tier 1 audit), decision and reasoning in `docs/DECISIONS.md`. The 2G-resilience
+  question flagged as open since Phase 0 is now closed: marginal benefit for a
+  one-or-two-visit B2B lead-gen site doesn't justify a service worker's maintenance risk.
+
 Phase 6 — findability.
 
 ### Added

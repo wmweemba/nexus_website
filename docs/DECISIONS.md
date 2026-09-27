@@ -7,6 +7,31 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-09-06 — No PWA / offline shell for this site
+
+`p7-pwa`, assess-only per the build plan. Ran the `pwa` skill's applicability gate and
+Tier 1 audit: zero PWA artefacts exist (no manifest, no service worker, no PWA meta tags).
+Verdict: **PWA candidate, marginal benefit** — this is a B2B lead-gen brochure site (land
+via search/referral, read, contact), not a tool with repeat daily use. The 2G-resilience
+value flagged as "open" in the entry below is real but thin against the actual user
+journey, which is a one-or-two-visit sales-cycle read, not repeat offline access.
+
+**Decision:** do not add a manifest, icons, or service worker this cycle.
+
+**Reasoning:** a manifest costs nothing against the JS budget, but a service worker is —
+in the audit skill's own words — "the single most dangerous thing on this list": a bad SW
+can serve stale assets to every returning user with no server-side recovery path. That
+risk isn't justified by a marginal offline-read benefit on a site whose value is the
+contact-form conversion, not repeat content access. It also runs against CLAUDE.md rule 1
+— no JS without a written justification — and a SW is exactly the standing complexity
+that rule exists to keep out.
+
+**Revisit if:** the site's role changes to something with real repeat/offline use (e.g. a
+client portal), or a future audit shows meaningful bounce-and-return traffic on 2G that a
+cached app shell would measurably help.
+
+---
+
 ## 2026-09-06 — sitemap.xml is a generated endpoint, not a static file
 
 `p6-visibility`. `src/pages/sitemap.xml.ts` builds the URL list from `getCollection`
@@ -378,7 +403,9 @@ Redirect `/about/` and `/contact/` to their new equivalents; 410 the rest.
 
 ## Open — decide during the build
 
-- **PWA / offline shell.** Genuine value on 2G, but not a launch blocker. Assess in
-  Phase 7 on evidence, not assumption.
 - **Case study client consent.** Naming ManifiPay and NdalamaHub in public case studies
   needs the client's agreement first.
+- **Security headers (CSP / `X-Frame-Options` / `X-Content-Type-Options`).** `/sec --full`
+  (2026-09-07) found nowhere to set these yet — no Coolify/reverse-proxy config exists in
+  this repo. Real P1, not blocking Phase 7, but must be resolved as part of `p8-deploy`
+  before DNS cutover. Proposed header block recorded in that audit's output.
