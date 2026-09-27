@@ -162,20 +162,39 @@
     view-timeline-axis: block;
   }
 
+  /* Full-bleed out of the centred .container so the strip really is viewport
+     wide. Without this the track travelled (trackWidth - 100vw) while only
+     ~72rem of it was ever visible, which overshot and pushed the last card
+     off the left edge. */
   .hscroll-sticky {
     position: sticky;
     top: 0;
     height: 100vh;
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
     display: flex;
     align-items: center;
     overflow: hidden;
     scroll-snap-type: none;
   }
 
+  /* Leading and trailing inset, aligned with the container's text edge, so the
+     first card starts flush under the heading and the last card finishes with
+     the same margin instead of butting against the viewport edge. */
   .hscroll-track {
+    padding-inline: max(
+      var(--space-gutter),
+      calc((100vw - var(--content-max)) / 2 + var(--space-gutter))
+    );
     animation: hscroll-move linear both;
     animation-timeline: --hscroll-progress;
-    animation-range: cover 0% cover 100%;
+    /* `contain` — not `cover`. The cover range starts the moment the 300vh
+       wrapper's top edge enters the viewport from below, so the track was
+       already part-translated before the panel had stuck: card one was half
+       gone before it could be read. The contain range spans exactly the window
+       where the wrapper fully covers the viewport, which is precisely the
+       sticky window. */
+    animation-range: contain 0% contain 100%;
     will-change: transform;
   }
 }
@@ -185,7 +204,7 @@
     transform: translateX(0);
   }
   to {
-    transform: translateX(calc(-1 * (100% - 100vw)));
+    transform: translateX(min(0px, calc(100vw - 100%)));
   }
 }
 

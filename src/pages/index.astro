@@ -42,6 +42,36 @@ const services = [
     body: 'Hardware, licensing and network equipment sourced and configured, so what arrives is ready to use rather than ready to unbox.',
   },
 ];
+
+/**
+ * The three systems running in production. NdalamaHub is client work and has a
+ * case study; BazaBooks and Chama360 are our own products, so the strongest
+ * proof is the running app rather than a write-up — those cards link out.
+ * Customer counts are deliberately left off the public site.
+ */
+const builds = [
+  {
+    kind: 'Lending management system',
+    title: 'NdalamaHub',
+    body: 'Borrower intake, application review queue, disbursement controls, a rollover engine and a collateral register.',
+    href: '/work/ndalamahub/',
+    external: false,
+  },
+  {
+    kind: 'Invoicing software',
+    title: 'BazaBooks',
+    body: 'Invoicing for Zambian SMEs — priced in kwacha, multi-currency, and sent straight to a customer over WhatsApp.',
+    href: 'https://bazabooks.nxhub.online',
+    external: true,
+  },
+  {
+    kind: 'Village banking platform',
+    title: 'Chama360',
+    body: 'Contributions, loans, interest and payouts for savings groups and village banks, with the group’s own rules configurable.',
+    href: 'https://chama360.nxhub.online',
+    external: true,
+  },
+];
 ---
 
 <html lang="en">
@@ -96,8 +126,8 @@ const services = [
 
         <blockquote class="hero-pullquote hero-content mt-12">
           <p style={`font-size: var(--text-2)`}>
-            We are small on purpose. You deal with the person who does the work, not an
-            account manager who relays it.
+            The standard a supervised institution needs, at a price a Zambian balance sheet
+            can actually carry.
           </p>
         </blockquote>
       </Section>
@@ -174,31 +204,34 @@ const services = [
           </h2>
         </Reveal>
 
-        <div class="mt-10 grid gap-6 md:grid-cols-2">
-          <Reveal as="div" class="work-card">
-            <a href="/work/ndalamahub/" class="work-card-link" style="display: block; border-radius: var(--radius-md); padding: var(--space-6); background: var(--mist)">
-              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--cyan-deep)">Lending management system</p>
-              <h3 class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">NdalamaHub</h3>
-              <p class="mt-2" style="color: var(--slate)">
-                Borrower intake, application review queue, disbursement controls, a rollover
-                engine and a collateral register. Live in production.
-              </p>
-            </a>
-          </Reveal>
-
-          <Reveal as="div" class="work-card">
-            <div style="border-radius: var(--radius-md); padding: var(--space-6); border: 1px dashed var(--mist); height: 100%">
-              <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--steel)">More on file</p>
-              <p class="mt-2" style="color: var(--slate)">
-                NdalamaHub is a representative sample rather than a full list — including a
-                security awareness programme run inside a Bank of Zambia-supervised
-                institution, unnamed per client sensitivity. References available on request.
-              </p>
-            </div>
-          </Reveal>
+        <div class="mt-10 grid gap-6 md:grid-cols-3">
+          {builds.map((build) => (
+            <Reveal as="div" class="work-card">
+              <a
+                href={build.href}
+                class="work-card-link"
+                target={build.external ? '_blank' : undefined}
+                rel={build.external ? 'noopener' : undefined}
+                style="display: flex; flex-direction: column; height: 100%; border-radius: var(--radius-md); padding: var(--space-6); background: var(--mist)"
+              >
+                <p class="font-mono text-xs uppercase tracking-[0.16em]" style="color: var(--cyan-deep)">{build.kind}</p>
+                <h3 class="mt-2 font-display font-semibold" style="font-size: var(--text-2)">{build.title}</h3>
+                <p class="mt-2" style="color: var(--slate)">{build.body}</p>
+                <span class="work-card-cue mt-4 font-mono text-xs uppercase tracking-[0.12em]" style="color: var(--cyan-deep)">
+                  {build.external ? 'Open the live app' : 'Read the case study'}
+                </span>
+              </a>
+            </Reveal>
+          ))}
         </div>
 
-        <a href="/work/" class="btn btn-primary mt-10">See the work</a>
+        <p class="mt-8 max-w-[60ch]" style="color: var(--slate)">
+          These are a representative sample rather than a full list. It also includes a
+          security awareness programme running inside a Bank of Zambia-supervised
+          institution, unnamed per client sensitivity. References available on request.
+        </p>
+
+        <a href="/work/" class="btn btn-primary mt-8">See the work</a>
       </Section>
 
       <Section ground="dark" id="close">
