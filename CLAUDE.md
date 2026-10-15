@@ -72,6 +72,21 @@ grep -oE '\.[a-z-]+-\\\[--[a-z-]+\\\]\{[^}]*\}' dist/**/*.css | grep -v 'var('
 Any hit lacking `var(` is dead CSS. Full writeup:
 `wsm-second-brain/systems/NS-010-tailwind-v4-token-shorthand-gotcha.md`.
 
+**⚠ Astro scoped styles do not reach elements rendered by a component.** A `<style>`
+block in a page is scoped with a hash attribute that is applied to elements written *in
+that file*. `<Section class="hero-section">` renders its element inside `Section.astro`,
+so it never carries the page's scope attribute and the rule silently never applies. No
+warning, no error, and it stays invisible until something depends on it — here,
+`overflow: hidden` had never worked and only surfaced when the hero parallax added a
+`scale()` that then overflowed the page. **Styles that target a component-rendered
+element belong in a global stylesheet, not in a page's scoped block.**
+
+**⚠ `getComputedStyle` returns a LIVE object.** Reading `cs.opacity` later in the same
+function gives the value at read time, not at measure time — which silently invalidates
+any before/after scroll measurement. Snapshot the values you need immediately
+(`DOMMatrix` copies; plain property reads do not). This produced two false results in one
+verification pass. See `patterns/working-with-claude.md` in the second brain.
+
 **Opera Mini** retains meaningful share on low-end Android in this market and renders
 server-side with almost no CSS animation. The site must be readable and navigable there
 with every effect absent.

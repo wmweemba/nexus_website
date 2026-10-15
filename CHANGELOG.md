@@ -7,7 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-Phase 7 — verification.
+Phases 0–7 built. Two review rounds done against the home page. Not deployed.
+
+**Picking this up?** Read `CLAUDE.md`, then `docs/BUILD-PLAN.md` for what remains
+(Round 3 — the page-by-page walkthrough — then Phase 8, ship). `docs/DECISIONS.md`
+carries the reasoning for anything that looks odd. Progress tracker:
+https://claude.ai/artifact/GUt1RBZ9C3jKXcrcDFGxTQ
+
+### Added — review round 2, motion pass (2026-10-15)
+
+- Hero parallax: the node graph drifts 14vh over the first viewport while content moves
+  at full rate. Measured 126px of lag at 900px of scroll.
+- Staggered block reveals (`src/components/Stagger.astro`): a named view-timeline on the
+  wrapper drives each child with an index-shifted range. A per-child `view()` timeline
+  does **not** work here — children of a heading block cross their own thresholds within
+  a few dozen pixels of each other. Blocks with one child use plain `Reveal`.
+- Scroll progress rail (`src/components/ProgressRail.astro`): 5px scroll-linked fill,
+  3px below 640px. Deliberately exempt from `prefers-reduced-motion` — it responds 1:1 to
+  the reader's own scrolling and carries position information.
+- Sticky section labels, and the two-column section layout that makes them work.
+- `.bleed` utility for anything that must span both grid columns.
+
+### Changed — review round 1 (2026-09-27)
+
+- Hero pull-quote states the positioning instead of leading with team size. The
+  "small on purpose" line stays on `/about/`.
+- Home page carries all three systems in production — NdalamaHub, BazaBooks, Chama360.
+- Sections are a two-column grid at 60rem and up: an 11rem label rail plus a content
+  column. Content measure narrows from 1152px to ~944px.
+
+### Fixed — review rounds
+
+- **Horizontal scroll never showed its first or last card in full.** Two separate faults:
+  `animation-range` was `cover`, which begins as the wrapper enters from below, so the
+  track was already part-translated before the panel stuck; and the travel assumed a
+  viewport-wide strip while it sat inside the centred 72rem container. Now `contain`
+  plus a full-bleed strip with insets aligned to `--content-edge`.
+- **`prefers-reduced-motion` only ever covered the JS-fallback branch.** On browsers with
+  native scroll-timeline, a reader with the setting on still got the fade and the 24px
+  rise. The reset now sits last in `scroll-system.css`, after the `@supports` branches it
+  has to beat in the cascade.
+- **`.hero-section { overflow: hidden }` had never applied.** It lived in `index.astro`'s
+  scoped `<style>`, but the element is rendered by `Section.astro` and so never carried
+  that file's scope attribute. Harmless until the parallax added `scale()`, which produced
+  11px of horizontal page scroll at 390px.
+- Progress rail was legible only in theory — 3px with a 22% track read as a rendering
+  artifact against the dark hero.
+
+### Known and accepted
+
+- A `.bleed` element spans both grid columns, so the horizontal strip's cards pass under
+  the label rail as the sticky panel releases (~300px of scroll). Cannot be removed
+  without JS. The label carries a soft shadow so it reads as a deliberate layer.
+- `docs/perf-baseline-2026-09-06.md` and `docs/qa-baseline-2026-09-06/` **predate both
+  review rounds**. Re-run `pa --full` and `qa --full` before the deploy gate.
+- Security headers (CSP, X-Frame-Options, X-Content-Type-Options) have nowhere to be set
+  until the Coolify config exists. Open P1, resolve in `p8-deploy`.
+
+### Phase 7 — verification
 
 ### Fixed
 

@@ -26,6 +26,33 @@ home page with the signature scroll moment. Weekend 2 completes it.
 
 ---
 
+## Where this actually is — 2026-10-15
+
+Phases 0–7 are built and committed. Two review rounds have run against the **home page
+only**. Nothing is deployed; `mynexusgroup.com` still serves the old WordPress site.
+
+**Next up: Round 3 — walk through every page other than the home page**, then Phase 8.
+
+| Route | Reviewed? |
+|---|---|
+| `/` | ✅ rounds 1 and 2 |
+| `/services/` | not yet |
+| `/services/security-awareness/` | not yet |
+| `/work/` and both case studies | not yet |
+| `/about/` | not yet |
+| `/contact/` | not yet — test the mailto path on a real phone |
+
+**Before the deploy gate**, re-run `pa --full` and `qa --full`. The baselines in
+`docs/perf-baseline-2026-09-06.md` and `docs/qa-baseline-2026-09-06/` predate both
+review rounds and no longer describe the site.
+
+**Carrying into Phase 8:** security headers (open P1 — nowhere to set them until the
+Coolify config exists) and the redirect map for the old URLs.
+
+**Start the dev server** with `preview_start` using the `nexus-dev` config. It is
+registered in `wsm-second-brain/.claude/launch.json`, not in this repo — that tool reads
+the launch file from the session's original working directory.
+
 # Weekend 1
 
 ## Phase 0 — Repo and foundations
