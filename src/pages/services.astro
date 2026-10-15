@@ -6,9 +6,11 @@
  */
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
+import ProgressRail from '../components/ProgressRail.astro';
 import Footer from '../components/Footer.astro';
 import Section from '../components/Section.astro';
 import Reveal from '../components/Reveal.astro';
+import Stagger from '../components/Stagger.astro';
 import Seo from '../components/Seo.astro';
 
 const services = [
@@ -96,11 +98,12 @@ const quoteShapes = [
   </head>
   <body class="bg-paper text-ink">
     <Nav />
+    <ProgressRail />
 
     <main>
       <Section ground="light" id="services-header">
-        <Reveal as="div">
-          <p class="chip">What we do</p>
+        <p class="chip section-label">What we do</p>
+        <Stagger as="div">
           <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5); max-width: 22ch">
             Six things, and we do all of them ourselves
           </h1>
@@ -108,7 +111,7 @@ const quoteShapes = [
             The security work is where we lead, but it is rarely all a client needs. Most
             engagements start in one column and end up spanning several.
           </p>
-        </Reveal>
+        </Stagger>
       </Section>
 
       <Section ground="dark" id="services-list">
@@ -137,8 +140,8 @@ const quoteShapes = [
       </Section>
 
       <Section ground="light" id="how-we-work">
+        <p class="chip section-label">How we work</p>
         <Reveal as="div">
-          <p class="chip">How we work</p>
           <h2 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-4)">
             You see the work before you pay for it
           </h2>

@@ -1,0 +1,19 @@
+---
+/**
+ * Scroll progress rail — a 3px fill down the leading edge showing how far
+ * through the document the reader is. Driven entirely by
+ * `animation-timeline: scroll(root)`; no JS, no scroll listener.
+ *
+ * Hidden outright where scroll-timeline is unsupported (see
+ * src/styles/scroll-system.css) rather than left as a dead empty rail.
+ *
+ * aria-hidden because it duplicates information the scrollbar already gives
+ * assistive technology — it is decoration for sighted readers, not a control.
+ *
+ * Sits immediately after <Nav /> on every page. There is no shared layout
+ * component in this project (each page owns its own <html>), so it is added
+ * per page rather than inherited.
+ */
+---
+
+<div class="progress-rail" aria-hidden="true"><i></i></div>

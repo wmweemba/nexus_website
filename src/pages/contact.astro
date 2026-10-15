@@ -8,9 +8,11 @@
  */
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
+import ProgressRail from '../components/ProgressRail.astro';
 import Footer from '../components/Footer.astro';
 import Section from '../components/Section.astro';
 import Reveal from '../components/Reveal.astro';
+import Stagger from '../components/Stagger.astro';
 import Seo from '../components/Seo.astro';
 
 const team = [
@@ -42,11 +44,12 @@ const scopingMailto = `mailto:info@mynexusgroup.com?subject=${scopingSubject}&bo
   </head>
   <body class="bg-paper text-ink">
     <Nav />
+    <ProgressRail />
 
     <main>
       <Section ground="dark" id="contact-header">
-        <Reveal as="div">
-          <p class="chip">Get in touch</p>
+        <p class="chip section-label">Get in touch</p>
+        <Stagger as="div">
           <h1 class="mt-4 font-display font-bold text-balance" style="font-size: var(--text-5); max-width: 20ch">
             Start with the scoping call.
           </h1>
@@ -55,7 +58,7 @@ const scopingMailto = `mailto:info@mynexusgroup.com?subject=${scopingSubject}&bo
             current setup would survive being looked at closely — that first conversation
             costs you nothing and usually tells you what you need to know.
           </p>
-        </Reveal>
+        </Stagger>
       </Section>
 
       <Section ground="light" id="contact-details">

@@ -225,3 +225,181 @@
     transform: none;
   }
 }
+
+/* ── Hero clipping ──
+   `overflow: hidden` for the hero lived in index.astro's scoped <style>, but
+   the element is rendered by Section.astro, so Astro's scope attribute never
+   landed on it and the rule has never applied. Harmless until the parallax
+   below added `scale()`, which then pushed ~11px of horizontal page scroll on
+   a 390px viewport. Unscoped here so it actually takes effect.
+   docs/UI_UX_SPEC.md §8 — the page body never scrolls sideways. */
+.hero-section {
+  overflow: hidden;
+}
+
+/* ── Hero parallax ── (motion idea 1)
+   The node graph drifts slower than the content in front of it, so the hero
+   gains depth as you leave it. One translateY on an element that already
+   exists — no new markup, no new bytes. The slight scale keeps the graphic's
+   bottom edge off-screen for the whole drift. */
+@supports (animation-timeline: scroll()) {
+  .hero-graphic {
+    animation: hero-drift linear both;
+    animation-timeline: scroll(root block);
+    animation-range: 0 100vh;
+    will-change: transform;
+  }
+}
+
+@keyframes hero-drift {
+  from {
+    transform: translateY(0) scale(1.06);
+  }
+  to {
+    transform: translateY(14vh) scale(1.06);
+  }
+}
+
+/* ── Staggered block reveal ── (motion idea 2)
+   Children of a .stagger arrive in sequence rather than as one block, which
+   reads as deliberate rather than as "a thing appeared".
+
+   A named view-timeline on the wrapper drives every child, with each child's
+   animation-range shifted by its index — that is what produces the stagger.
+   Using the default `view()` per child would not work here: the children of a
+   heading block sit within a few dozen pixels of each other, so they would all
+   cross their own thresholds at effectively the same moment.
+
+   Degrades to the plain .reveal block fade where scroll-timeline is missing
+   (the IntersectionObserver in Reveal.astro drives that), which is why
+   .stagger also carries .reveal and why the parent's own animation is
+   cancelled in the supporting branch — otherwise both would run and the
+   transforms would compound. */
+@supports (animation-timeline: scroll()) {
+  .stagger {
+    view-timeline-name: --stagger-tl;
+    view-timeline-axis: block;
+  }
+
+  .reveal.stagger {
+    animation: none;
+  }
+
+  .stagger > * {
+    animation: reveal-in linear both;
+    animation-timeline: --stagger-tl;
+    animation-range: entry calc(6% + (var(--i, 0) * 7%)) entry calc(64% + (var(--i, 0) * 7%));
+  }
+
+  .stagger > *:nth-child(1) { --i: 0; }
+  .stagger > *:nth-child(2) { --i: 1; }
+  .stagger > *:nth-child(3) { --i: 2; }
+  .stagger > *:nth-child(4) { --i: 3; }
+  .stagger > *:nth-child(5) { --i: 4; }
+  .stagger > *:nth-child(6) { --i: 5; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger > * {
+    animation: none;
+  }
+}
+
+/* ── Scroll progress rail ── (motion idea 3)
+   Fills as the document scrolls, so the reader can see how long the page is.
+   Hidden entirely where scroll-timeline is unsupported rather than left as a
+   dead empty rail.
+
+   Deliberately NOT disabled under prefers-reduced-motion: it is a 1:1 direct
+   response to the reader's own scrolling, not self-propelled motion, and it
+   carries information about position. Removing it would cost the reader
+   something and spare them nothing. */
+.progress-rail {
+  display: none;
+}
+
+@supports (animation-timeline: scroll()) {
+  .progress-rail {
+    display: block;
+    position: fixed;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 3px;
+    z-index: 50;
+    pointer-events: none;
+    background: color-mix(in srgb, var(--steel) 22%, transparent);
+  }
+
+  .progress-rail > i {
+    display: block;
+    height: 100%;
+    width: 100%;
+    transform-origin: top center;
+    transform: scaleY(0);
+    background: linear-gradient(180deg, var(--cyan), #4cc9b0 62%, var(--sap));
+    animation: rail-fill linear both;
+    animation-timeline: scroll(root block);
+    will-change: transform;
+  }
+}
+
+@keyframes rail-fill {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* ── Sticky section labels ── (motion idea 5)
+   The section eyebrow pins to the top while its section is in view, then
+   releases as the next one arrives. No animation at all — plain position:
+   sticky — but it makes a long page feel navigable rather than endless.
+
+   Two constraints this markup has to satisfy, both easy to break later:
+   the label must be a DIRECT child of the tall .container (a short wrapper
+   gives it nothing to travel through), and it must not sit inside a
+   transformed ancestor such as .reveal, because a transform makes that
+   ancestor the containing block and sticky stops working. */
+.section-label {
+  position: sticky;
+  top: var(--space-4);
+  z-index: 4;
+  width: fit-content;
+}
+
+/* The default chip background is translucent; a sticky label needs an opaque
+   one or the content scrolls through it. */
+[data-ground='dark'] .section-label {
+  background: color-mix(in srgb, var(--paper) 12%, var(--ink));
+}
+
+[data-ground='light'] .section-label {
+  background: var(--mist);
+}
+
+/* ── Reduced motion, final word ────────────────────────────────────────
+   Must be the LAST block in this file. The @supports branches above set
+   animations at the same specificity, so an earlier reduced-motion rule
+   loses the cascade to them — which is exactly what happened: the existing
+   rule only reset `.reveal.js-fallback` (the IntersectionObserver path) and
+   left the native scroll-timeline `.reveal` animating. A reader with the
+   setting on still got the fade and the 24px rise.
+
+   Everything that moves is cancelled here and reset to its resting state,
+   so content is plainly visible with no transform.
+
+   The progress rail is deliberately exempt — see its block above. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal.stagger,
+  .stagger > *,
+  .hero-graphic,
+  .hscroll-track,
+  .phone-frame {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
