@@ -324,10 +324,14 @@
     position: fixed;
     inset-block: 0;
     inset-inline-start: 0;
-    width: 3px;
+    width: 5px;
     z-index: 50;
     pointer-events: none;
-    background: color-mix(in srgb, var(--steel) 22%, transparent);
+    /* The unfilled track has to be visible on BOTH grounds or the rail reads
+       as a rendering artifact rather than a feature — at 3px against a dark
+       hero it was invisible in practice. */
+    background: color-mix(in srgb, var(--steel) 42%, transparent);
+    box-shadow: inset -1px 0 0 color-mix(in srgb, var(--ink) 18%, transparent);
   }
 
   .progress-rail > i {
@@ -337,9 +341,20 @@
     transform-origin: top center;
     transform: scaleY(0);
     background: linear-gradient(180deg, var(--cyan), #4cc9b0 62%, var(--sap));
+    /* A short glow past the leading edge so the fill reads as travelling,
+       not just as a coloured strip. Costs nothing — it is the same element. */
+    box-shadow: 0 0 10px 1px color-mix(in srgb, var(--cyan) 55%, transparent);
     animation: rail-fill linear both;
     animation-timeline: scroll(root block);
     will-change: transform;
+  }
+
+  /* Below the mobile breakpoint the rail competes with the thumb's reach and
+     with the OS back-swipe gesture area. Narrow it rather than drop it. */
+  @media (max-width: 640px) {
+    .progress-rail {
+      width: 3px;
+    }
   }
 }
 
