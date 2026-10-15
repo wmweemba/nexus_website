@@ -69,6 +69,36 @@ two audiences find its register.
 - Transitions between grounds are hard edges or the gradient rule — never a soft fade,
   which reads as indecision.
 
+## 3b. Section layout — a label rail and a content column
+
+At **60rem and above**, `.section > .container` is a two-column grid: a
+`--label-col` (11rem) rail holding the sticky section eyebrow, and a content
+column holding everything else.
+
+**Why it exists.** Section eyebrows are sticky. In a single column a pinned
+label floats over whatever happens to be scrolling beneath it — in practice it
+landed on top of the wedge section's own call to action. Giving the label its
+own column removes the overlap by construction instead of by tuning offsets.
+
+**Rules.**
+- Everything in a section defaults to the content column. Only `.section-label`
+  takes the rail.
+- Anything that must reach the viewport edge takes `.bleed` to span both
+  columns. The horizontal scroll strip computes its full-bleed break from its
+  containing block, so it is wrong in a single column.
+- Inline controls (`.btn`, `.chip`) need `justify-self: start`, or the grid
+  stretches them to the full column width.
+- The strip's cards align to `--content-edge`, which folds in the rail width,
+  so the first card sits under the heading rather than under the rail.
+
+**Below 60rem** the grid collapses to one column and the label stops being
+sticky. On a phone a pinned eyebrow costs vertical space the content needs
+more, and it would reintroduce the overlap the rail exists to remove.
+
+**Known and accepted:** a `.bleed` element spans both columns, so its content
+passes under the rail as the sticky panel releases. The label carries a soft
+shadow so that reads as a deliberate layer rather than a glitch.
+
 ## 4. The recurring device — the node graph
 
 Points converging is the company name, the logo's argument, and already exists in

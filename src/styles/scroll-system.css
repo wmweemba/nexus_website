@@ -182,10 +182,23 @@
      first card starts flush under the heading and the last card finishes with
      the same margin instead of butting against the viewport edge. */
   .hscroll-track {
-    padding-inline: max(
-      var(--space-gutter),
-      calc((100vw - var(--content-max)) / 2 + var(--space-gutter))
-    );
+    /* Aligned to the CONTENT column's text edge, not the container's, so the
+       first card sits directly under the heading rather than under the label
+       rail. --content-edge folds in the rail width; below the rail breakpoint
+       it still resolves, so the fallback below keeps the two in step. */
+    padding-inline: var(--content-edge);
+  }
+
+  @media (max-width: 59.999rem) {
+    .hscroll-track {
+      padding-inline: max(
+        var(--space-gutter),
+        calc((100vw - var(--content-max)) / 2 + var(--space-gutter))
+      );
+    }
+  }
+
+  .hscroll-track {
     animation: hscroll-move linear both;
     animation-timeline: --hscroll-progress;
     /* `contain` — not `cover`. The cover range starts the moment the 300vh
@@ -377,11 +390,24 @@
    gives it nothing to travel through), and it must not sit inside a
    transformed ancestor such as .reveal, because a transform makes that
    ancestor the containing block and sticky stops working. */
+/* Sticky only where there is a rail to be sticky IN. Below the rail
+   breakpoint the layout is one column again, and a pinned eyebrow would both
+   cost vertical space the content needs more and reintroduce the very overlap
+   the rail exists to remove. Keep the breakpoint in step with global.css. */
 .section-label {
-  position: sticky;
-  top: var(--space-4);
-  z-index: 4;
   width: fit-content;
+}
+
+@media (min-width: 60rem) {
+  .section-label {
+    position: sticky;
+    top: var(--space-4);
+    z-index: 4;
+    /* The horizontal strip spans both columns by design, so its cards pass
+       under the rail as the sticky panel releases. A soft edge makes that
+       read as a deliberate layer rather than as a glitch. */
+    box-shadow: 0 2px 10px color-mix(in srgb, var(--ink) 22%, transparent);
+  }
 }
 
 /* The default chip background is translucent; a sticky label needs an opaque

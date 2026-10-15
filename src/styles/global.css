@@ -100,6 +100,51 @@ body {
   padding-inline: var(--space-gutter);
 }
 
+/* ── Section layout: a label rail and a content column ──────────────────
+   Section eyebrows are sticky (see .section-label in scroll-system.css).
+   In a single column a pinned label floats over whatever happens to be
+   scrolling beneath it — it collided with the wedge section's own CTA.
+   Giving the label its own column removes the overlap by construction
+   rather than by tuning offsets.
+
+   Scoped to `.section .container` because Nav and Footer share .container
+   and both rely on it being a plain block with their own flex inside.
+
+   Collapses to one column below --bp-rail, where a 176px rail would take a
+   fifth of the width. The label is not sticky there either: on a phone a
+   pinned eyebrow costs vertical space that the content needs more. */
+@media (min-width: 60rem) {
+  .section > .container {
+    display: grid;
+    grid-template-columns: var(--label-col) minmax(0, 1fr);
+    column-gap: var(--space-6);
+    align-items: start;
+  }
+
+  /* Everything lands in the content column unless it says otherwise. */
+  .section > .container > * {
+    grid-column: 2;
+  }
+
+  .section > .container > .section-label {
+    grid-column: 1;
+  }
+
+  /* Grid items stretch by default, which would blow inline controls out to
+     the full column width. */
+  .section > .container > .btn,
+  .section > .container > .chip {
+    justify-self: start;
+  }
+
+  /* Opt-out for anything that has to reach the viewport edge — the
+     horizontal scroll strip computes its full-bleed break from its
+     containing block, so it must span both columns or the maths is wrong. */
+  .section > .container > .bleed {
+    grid-column: 1 / -1;
+  }
+}
+
 /* ── Buttons ── ground-aware: colours resolve from the section's own set. */
 .btn {
   display: inline-flex;

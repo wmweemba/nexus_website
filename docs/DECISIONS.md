@@ -7,6 +7,30 @@ Format: **date — decision**, then why, then what it rules out.
 
 ---
 
+## 2026-10-15 — Sections are a label rail plus a content column
+
+Sticky section eyebrows over a single-column layout collide with content by
+construction: the label pins, the content scrolls under it, and there is
+nowhere else for either to go. Observed as the wedge section's "See how it
+works" button passing beneath its own pinned label.
+
+**Decision:** `.section > .container` becomes a two-column grid at 60rem and
+above — an 11rem rail for the label, a content column for everything else.
+Collapses to one column below that, where the label also stops being sticky.
+
+**Rules out:** tuning sticky offsets or z-index to dodge the overlap, which
+would have been symptom-chasing — the collision recurs at every section, at
+some scroll position, on every page.
+
+**Cost accepted:** the content measure narrows from 1152px to about 944px, and
+anything needing a full-bleed break now needs `.bleed` to span both columns.
+The horizontal strip's card inset moved to `--content-edge` so cards still
+align under the heading. Verified: first card and heading both land at 428px,
+with a symmetric trailing gap.
+
+**Still true after the change:** no sideways page scroll at 390px, the strip
+lands both end cards fully at 1512px and 390px, and buttons do not stretch.
+
 ## 2026-09-06 — No PWA / offline shell for this site
 
 `p7-pwa`, assess-only per the build plan. Ran the `pwa` skill's applicability gate and
